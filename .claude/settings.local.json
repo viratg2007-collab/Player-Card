@@ -23,7 +23,10 @@
       "Bash(git remote *)",
       "Bash(git push *)",
       "Bash(git commit -q -m 'Add README *)",
-      "Bash(git commit -q -m 'Extend match formats and polish app layout *)"
+      "Bash(git commit -q -m 'Extend match formats and polish app layout *)",
+      "Bash(curl -s -o /dev/null -w \"/ HTTP %{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(curl -s -o /dev/null -w \"favicon HTTP %{http_code}\\\\n\" http://localhost:5173/favicon.svg)",
+      "Bash(git commit -q -m 'Add match detail view, history format filter, and SVG logo *)"
     ]
   }
 }

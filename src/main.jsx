@@ -6,6 +6,7 @@ import App from './App.jsx'
 import Dashboard from './screens/Dashboard.jsx'
 import MatchHistory from './screens/MatchHistory.jsx'
 import MatchForm from './screens/MatchForm.jsx'
+import MatchDetail from './screens/MatchDetail.jsx'
 import Profile from './screens/Profile.jsx'
 
 // HashRouter keeps deep links working when this is served as a static file
@@ -18,7 +19,8 @@ const router = createHashRouter([
       { index: true, element: <Dashboard /> },
       { path: 'history', element: <MatchHistory /> },
       { path: 'add', element: <MatchForm /> },
-      { path: 'match/:id', element: <MatchForm /> },
+      { path: 'match/:id', element: <MatchDetail /> },
+      { path: 'match/:id/edit', element: <MatchForm /> },
       { path: 'profile', element: <Profile /> },
     ],
   },

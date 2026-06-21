@@ -71,8 +71,8 @@ export default function MatchForm() {
   async function handleSubmit(e) {
     e.preventDefault()
     setSaving(true)
-    await saveMatch(form)
-    navigate('/history')
+    const saved = await saveMatch(form)
+    navigate(isEdit ? `/match/${saved.id}` : '/history')
   }
 
   async function handleDelete() {

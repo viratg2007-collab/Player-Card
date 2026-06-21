@@ -1,10 +1,25 @@
+import { useEffect, useMemo, useState } from 'react'
 import { useSeasonMatches } from '../hooks/useSeasonMatches.js'
 import SeasonSelect from '../components/SeasonSelect.jsx'
+import FilterPills from '../components/FilterPills.jsx'
 import MatchListItem from '../components/MatchListItem.jsx'
 import EmptyState from '../components/EmptyState.jsx'
 
 export default function MatchHistory() {
   const { loading, matches, seasons, season, chooseSeason } = useSeasonMatches()
+  const [format, setFormat] = useState('')
+
+  // Formats present in the current season, most-played first.
+  const formats = useMemo(() => {
+    const counts = new Map()
+    for (const m of matches) counts.set(m.format, (counts.get(m.format) || 0) + 1)
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([f]) => f)
+  }, [matches])
+
+  // Drop the format filter if it's no longer available (e.g. season changed).
+  useEffect(() => {
+    if (format && !formats.includes(format)) setFormat('')
+  }, [formats, format])
 
   if (loading) return <Loading />
 
@@ -18,24 +33,28 @@ export default function MatchHistory() {
     )
   }
 
+  const visible = format ? matches.filter((m) => m.format === format) : matches
+
   return (
     <div>
       <header className="mb-4">
         <h1 className="text-2xl font-bold text-ink">Matches</h1>
         <p className="text-sm text-slate-500">
-          {matches.length} {matches.length === 1 ? 'match' : 'matches'}
+          {visible.length} {visible.length === 1 ? 'match' : 'matches'}
+          {format ? ` · ${format}` : ''}
         </p>
       </header>
 
       <SeasonSelect seasons={seasons} value={season} onChange={chooseSeason} />
+      <FilterPills options={formats} value={format} onChange={setFormat} allLabel="All formats" />
 
-      {matches.length === 0 ? (
+      {visible.length === 0 ? (
         <p className="rounded-xl bg-white px-4 py-3 text-sm text-slate-500 ring-1 ring-slate-200/60">
-          No matches in this season.
+          No matches to show.
         </p>
       ) : (
         <div className="space-y-2">
-          {matches.map((m) => (
+          {visible.map((m) => (
             <MatchListItem key={m.id} match={m} />
           ))}
         </div>
