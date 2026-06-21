@@ -5,6 +5,7 @@ import { loadSampleData } from '../db/seed.js'
 import SeasonSelect from '../components/SeasonSelect.jsx'
 import StatCard from '../components/StatCard.jsx'
 import RunsTrend from '../components/RunsTrend.jsx'
+import FormatBreakdown from '../components/FormatBreakdown.jsx'
 import MatchListItem from '../components/MatchListItem.jsx'
 import EmptyState from '../components/EmptyState.jsx'
 
@@ -88,6 +89,8 @@ export default function Dashboard() {
             { label: 'Stumpings', value: s.fielding.stumpings },
           ]}
         />
+
+        <FormatBreakdown matches={matches} />
       </div>
 
       <section className="mt-6">

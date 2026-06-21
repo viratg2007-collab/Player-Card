@@ -5,6 +5,7 @@ import {
   fieldingStats,
   seasonSummary,
   listSeasons,
+  statsByFormat,
 } from './stats.js'
 import { EM_DASH } from '../constants.js'
 
@@ -156,6 +157,34 @@ describe('listSeasons', () => {
       { season: '2025', date: '2025-07-15' },
     ]
     expect(listSeasons(matches)).toEqual(['2026', '2025'])
+  })
+})
+
+describe('statsByFormat', () => {
+  const m = (format, runs, wickets) => ({
+    format,
+    batting: { didBat: true, runs, balls: runs, howOut: 'caught', fours: 0, sixes: 0 },
+    bowling: { didBowl: true, overs: 4, maidens: 0, runsConceded: 20, wickets },
+  })
+
+  it('groups matches by format with runs and wickets', () => {
+    const rows = statsByFormat([
+      m('T20', 30, 1),
+      m('T20', 20, 2),
+      m('50-over', 80, 0),
+    ])
+    const t20 = rows.find((r) => r.format === 'T20')
+    const fifty = rows.find((r) => r.format === '50-over')
+    expect(t20.matches).toBe(2)
+    expect(t20.runs).toBe(50)
+    expect(t20.wickets).toBe(3)
+    expect(fifty.matches).toBe(1)
+    expect(fifty.runs).toBe(80)
+  })
+
+  it('orders by most matches played first', () => {
+    const rows = statsByFormat([m('T20', 10, 0), m('50-over', 10, 0), m('50-over', 10, 0)])
+    expect(rows[0].format).toBe('50-over')
   })
 })
 

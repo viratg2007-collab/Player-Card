@@ -125,6 +125,30 @@ export function seasonSummary(matches) {
   }
 }
 
+// Per-format breakdown: how the player performs in each format they've played.
+// Returns one row per format present in `matches`, most-played first.
+export function statsByFormat(matches) {
+  const groups = new Map()
+  for (const m of matches) {
+    if (!groups.has(m.format)) groups.set(m.format, [])
+    groups.get(m.format).push(m)
+  }
+  return [...groups.entries()]
+    .map(([format, ms]) => {
+      const bat = battingStats(ms)
+      const bowl = bowlingStats(ms)
+      return {
+        format,
+        matches: ms.length,
+        runs: bat.totalRuns,
+        battingAverage: bat.average,
+        wickets: bowl.wickets,
+        bowlingAverage: bowl.average,
+      }
+    })
+    .sort((a, b) => b.matches - a.matches || b.runs - a.runs)
+}
+
 // Unique season labels found across matches, most recent first (by latest match
 // date within each season).
 export function listSeasons(matches) {

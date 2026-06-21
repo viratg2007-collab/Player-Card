@@ -39,7 +39,8 @@ Stored in IndexedDB database `cricket-tracker`, version 1.
   date: string,            // "YYYY-MM-DD"
   opposition: string,
   venue: string,           // optional, may be ""
-  format: "T20" | "40-over" | "50-over" | "Other",
+  // format options: "T20" | "T10" | "40-over" | "50-over" | "60-over" | "Other"
+  format: string,
   customOvers: number|null, // only meaningful when format === "Other"
 
   batting: {
@@ -126,6 +127,16 @@ The integer part is whole overs; the first decimal digit is balls (0–5).
 
 - **Catches / run-outs / stumpings** = simple sums.
 - **Total dismissals (fielding)** = catches + runOuts + stumpings.
+
+### Per-format breakdown
+
+`statsByFormat(matches)` groups matches by `format` and returns one row per
+format (matches / runs / batting avg / wickets / bowling avg), most-played
+first. Surfaced on the dashboard via `FormatBreakdown` (shown only when 2+
+formats are present). Formats are limit-overs single-innings games — the data
+model stores one batting and one bowling line per match, so **multi-innings
+formats (Test/first-class) and balls-based formats (The Hundred) are out of
+scope until the model supports a second innings per match.**
 
 ### Divide-by-zero rule
 

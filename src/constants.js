@@ -1,4 +1,4 @@
-export const FORMATS = ['T20', '40-over', '50-over', 'Other']
+export const FORMATS = ['T20', 'T10', '40-over', '50-over', '60-over', 'Other']
 
 // value: stored on the record, label: shown in the UI.
 export const DISMISSALS = [
