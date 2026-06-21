@@ -7,13 +7,15 @@ import SeasonSelect from '../components/SeasonSelect.jsx'
 import FilterPills from '../components/FilterPills.jsx'
 import StatCard from '../components/StatCard.jsx'
 import RunsTrend from '../components/RunsTrend.jsx'
+import EconomyTrend from '../components/EconomyTrend.jsx'
 import FormatBreakdown from '../components/FormatBreakdown.jsx'
 import Highlights from '../components/Highlights.jsx'
+import SeasonDelta from '../components/SeasonDelta.jsx'
 import MatchListItem from '../components/MatchListItem.jsx'
 import EmptyState from '../components/EmptyState.jsx'
 
 export default function Dashboard() {
-  const { loading, matches, seasons, season, chooseSeason } = useSeasonMatches()
+  const { loading, allMatches, matches, seasons, season, chooseSeason } = useSeasonMatches()
   const [format, setFormat] = useState('')
 
   // Formats present in the current season, most-played first.
@@ -72,6 +74,8 @@ export default function Dashboard() {
       <FilterPills options={formats} value={format} onChange={setFormat} allLabel="All formats" />
 
       <div className="space-y-3">
+        <SeasonDelta allMatches={allMatches} season={season} seasons={seasons} />
+
         <Highlights matches={filtered} />
 
         <StatCard
@@ -100,6 +104,8 @@ export default function Dashboard() {
             { label: 'Maidens', value: s.bowling.maidens },
           ]}
         />
+
+        <EconomyTrend matches={filtered} />
 
         <StatCard
           title="Fielding"
