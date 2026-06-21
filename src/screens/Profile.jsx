@@ -1,22 +1,24 @@
 import { useEffect, useState } from 'react'
 import { getProfile, saveProfile } from '../db/matches.js'
-import { loadSampleData, clearAllData } from '../db/seed.js'
 import { useSeasonMatches } from '../hooks/useSeasonMatches.js'
 import { seasonSummary } from '../lib/stats.js'
 import SeasonSelect from '../components/SeasonSelect.jsx'
+import SeasonManager from '../components/SeasonManager.jsx'
+import DataTools from '../components/DataTools.jsx'
 import { TextField } from '../components/form/Field.jsx'
 
 export default function Profile() {
-  const { matches, seasons, season, chooseSeason } = useSeasonMatches()
+  const { allMatches, matches, seasons, season, chooseSeason } = useSeasonMatches()
   const [name, setName] = useState('')
   const [savedName, setSavedName] = useState('')
+  const [currentSeason, setCurrentSeason] = useState('')
   const [shareNote, setShareNote] = useState('')
-  const [busy, setBusy] = useState(false)
 
   useEffect(() => {
     getProfile().then((p) => {
       setName(p.name)
       setSavedName(p.name)
+      setCurrentSeason(p.currentSeason)
     })
   }, [])
 
@@ -44,20 +46,6 @@ export default function Profile() {
   }
 
   const dirty = name.trim() !== savedName
-
-  async function handleLoadSample() {
-    if (matches.length && !window.confirm('Add a sample 2026 season to your data?')) return
-    setBusy(true)
-    await loadSampleData()
-    window.location.reload()
-  }
-
-  async function handleClear() {
-    if (!window.confirm('Delete ALL matches and reset your profile? This cannot be undone.')) return
-    setBusy(true)
-    await clearAllData()
-    window.location.reload()
-  }
 
   return (
     <div>
@@ -121,30 +109,17 @@ export default function Profile() {
 
       <div className="mt-8 mb-2">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+          Seasons
+        </h2>
+      </div>
+      <SeasonManager seasons={seasons} currentSeason={currentSeason} />
+
+      <div className="mt-8 mb-2">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
           Data
         </h2>
       </div>
-      <section className="space-y-2 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200/60">
-        <button
-          type="button"
-          onClick={handleLoadSample}
-          disabled={busy}
-          className="w-full rounded-xl bg-slate-100 py-2.5 text-sm font-semibold text-ink transition active:scale-[0.99] disabled:opacity-50"
-        >
-          Load sample season
-        </button>
-        <button
-          type="button"
-          onClick={handleClear}
-          disabled={busy}
-          className="w-full rounded-xl py-2.5 text-sm font-semibold text-red-600 transition active:scale-[0.99] disabled:opacity-50"
-        >
-          Clear all data
-        </button>
-        <p className="px-1 pt-1 text-xs text-slate-400">
-          Everything is stored only on this device, in your browser.
-        </p>
-      </section>
+      <DataTools hasData={allMatches.length > 0} />
     </div>
   )
 }

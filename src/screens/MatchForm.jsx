@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getMatch, saveMatch, deleteMatch, getAllMatches } from '../db/matches.js'
+import { getMatch, saveMatch, deleteMatch, getAllMatches, getProfile } from '../db/matches.js'
 import { FORMATS, DISMISSALS } from '../constants.js'
 import {
   TextField,
@@ -44,10 +44,11 @@ export default function MatchForm() {
         const existing = await getMatch(id)
         if (active) setForm(existing ? toFormState(existing) : blankMatch())
       } else {
-        // New match: default season to the most recently used one.
-        const all = await getAllMatches()
-        const lastSeason = all[0]?.season
-        if (active) setForm(blankMatch(lastSeason))
+        // New match: default season to the chosen current season, else the
+        // most recently used one.
+        const [all, profile] = await Promise.all([getAllMatches(), getProfile()])
+        const defaultSeason = profile.currentSeason || all[0]?.season
+        if (active) setForm(blankMatch(defaultSeason))
       }
     }
     load()

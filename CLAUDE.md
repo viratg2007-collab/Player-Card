@@ -71,7 +71,20 @@ Stored in IndexedDB database `cricket-tracker`, version 1.
 
 ### `profile` store (keyPath `id`)
 
-Single record with `id: "me"`: `{ id: "me", name: string }`.
+Single record with `id: "me"`:
+`{ id: "me", name: string, currentSeason: string }`.
+`currentSeason` is the label new matches default to (set in Profile → Seasons).
+
+### Data utilities
+
+- `renameSeason(from, to)` — rewrites a season label across all its matches.
+- `importMatches(inputs)` — bulk-creates matches (fresh ids) from CSV.
+- `src/lib/csv.js` — `toCSV` / `fromCSV` round-trip matches (flat columns in
+  `CSV_COLUMNS`); used by Profile → Data export/import.
+- `src/lib/matchSummary.js` — `matchSummary(match, name)` shareable text for one
+  match.
+- Stats helpers in `src/lib/stats.js`: `highlights` (personal bests),
+  `statsByFormat`, `listSeasons`, `seasonSummary`.
 
 ## Season scoping
 

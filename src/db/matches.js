@@ -96,12 +96,46 @@ export async function deleteMatch(id) {
 export async function getProfile() {
   const db = await getDB()
   const profile = await db.get(PROFILE, 'me')
-  return profile || { id: 'me', name: '' }
+  return { id: 'me', name: '', currentSeason: '', ...profile }
 }
 
 export async function saveProfile(profile) {
   const db = await getDB()
-  const record = { id: 'me', name: (profile.name || '').trim() }
+  const existing = await db.get(PROFILE, 'me')
+  const record = {
+    id: 'me',
+    name: (profile.name ?? existing?.name ?? '').trim(),
+    currentSeason: (profile.currentSeason ?? existing?.currentSeason ?? '').trim(),
+  }
   await db.put(PROFILE, record)
   return record
+}
+
+// Rename a season label across every match that uses it.
+export async function renameSeason(from, to) {
+  const target = (to || '').trim()
+  if (!target || from === target) return 0
+  const db = await getDB()
+  const all = await db.getAll(MATCHES)
+  const tx = db.transaction(MATCHES, 'readwrite')
+  let changed = 0
+  for (const m of all) {
+    if (m.season === from) {
+      await tx.store.put({ ...m, season: target, updatedAt: Date.now() })
+      changed++
+    }
+  }
+  await tx.done
+  return changed
+}
+
+// Bulk import match inputs (e.g. from CSV). Each gets a fresh id via saveMatch's
+// normalization. Returns the number imported.
+export async function importMatches(inputs) {
+  let count = 0
+  for (const input of inputs) {
+    await saveMatch({ ...input, id: undefined })
+    count++
+  }
+  return count
 }

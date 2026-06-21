@@ -6,6 +6,7 @@ import {
   seasonSummary,
   listSeasons,
   statsByFormat,
+  highlights,
 } from './stats.js'
 import { EM_DASH } from '../constants.js'
 
@@ -185,6 +186,43 @@ describe('statsByFormat', () => {
   it('orders by most matches played first', () => {
     const rows = statsByFormat([m('T20', 10, 0), m('50-over', 10, 0), m('50-over', 10, 0)])
     expect(rows[0].format).toBe('50-over')
+  })
+})
+
+describe('highlights', () => {
+  const bk = (b, opp) => ({
+    opposition: opp,
+    batting: { didBat: true, howOut: 'caught', fours: 0, sixes: 0, balls: 50, runs: 0, ...b },
+  })
+
+  it('picks the highest knock and remembers not-out status', () => {
+    const h = highlights([
+      bk({ runs: 64, howOut: 'caught' }, 'A'),
+      bk({ runs: 70, howOut: 'notout' }, 'B'),
+    ])
+    expect(h.bestKnock.runs).toBe(70)
+    expect(h.bestKnock.notOut).toBe(true)
+    expect(h.bestKnock.opposition).toBe('B')
+  })
+
+  it('picks best bowling by wickets then fewest runs', () => {
+    const h = highlights([
+      { opposition: 'A', bowling: { didBowl: true, overs: 4, maidens: 0, runsConceded: 27, wickets: 4 } },
+      { opposition: 'B', bowling: { didBowl: true, overs: 4, maidens: 0, runsConceded: 22, wickets: 4 } },
+    ])
+    expect(h.bestBowling).toMatchObject({ wickets: 4, runs: 22, opposition: 'B' })
+  })
+
+  it('returns nulls when there are no performances', () => {
+    const h = highlights([])
+    expect(h.bestKnock).toBeNull()
+    expect(h.bestBowling).toBeNull()
+    expect(h.mostSixes).toBeNull()
+  })
+
+  it('tracks most sixes only when there are any', () => {
+    expect(highlights([bk({ runs: 10, sixes: 0 }, 'A')]).mostSixes).toBeNull()
+    expect(highlights([bk({ runs: 30, sixes: 3 }, 'A')]).mostSixes.sixes).toBe(3)
   })
 })
 

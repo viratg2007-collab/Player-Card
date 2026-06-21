@@ -125,6 +125,42 @@ export function seasonSummary(matches) {
   }
 }
 
+// Personal bests across the given (already season-filtered) matches: the top
+// knock, best bowling spell, and most sixes in an innings. Any of these may be
+// null if the player has no qualifying performance.
+export function highlights(matches) {
+  let bestKnock = null
+  let bestBowling = null
+  let mostSixes = null
+
+  for (const m of matches) {
+    if (m.batting?.didBat && m.batting.howOut !== 'dnb') {
+      const notOut = !REAL_DISMISSALS.includes(m.batting.howOut)
+      const runs = m.batting.runs || 0
+      if (!bestKnock || runs > bestKnock.runs) {
+        bestKnock = { runs, notOut, opposition: m.opposition, date: m.date }
+      }
+      const sixes = m.batting.sixes || 0
+      if (sixes > 0 && (!mostSixes || sixes > mostSixes.sixes)) {
+        mostSixes = { sixes, opposition: m.opposition, date: m.date }
+      }
+    }
+    if (m.bowling?.didBowl) {
+      const wickets = m.bowling.wickets || 0
+      const runs = m.bowling.runsConceded || 0
+      if (
+        !bestBowling ||
+        wickets > bestBowling.wickets ||
+        (wickets === bestBowling.wickets && runs < bestBowling.runs)
+      ) {
+        bestBowling = { wickets, runs, opposition: m.opposition, date: m.date }
+      }
+    }
+  }
+
+  return { bestKnock, bestBowling, mostSixes }
+}
+
 // Per-format breakdown: how the player performs in each format they've played.
 // Returns one row per format present in `matches`, most-played first.
 export function statsByFormat(matches) {

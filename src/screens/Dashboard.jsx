@@ -6,6 +6,7 @@ import SeasonSelect from '../components/SeasonSelect.jsx'
 import StatCard from '../components/StatCard.jsx'
 import RunsTrend from '../components/RunsTrend.jsx'
 import FormatBreakdown from '../components/FormatBreakdown.jsx'
+import Highlights from '../components/Highlights.jsx'
 import MatchListItem from '../components/MatchListItem.jsx'
 import EmptyState from '../components/EmptyState.jsx'
 
@@ -54,6 +55,8 @@ export default function Dashboard() {
       <SeasonSelect seasons={seasons} value={season} onChange={chooseSeason} />
 
       <div className="space-y-3">
+        <Highlights matches={matches} />
+
         <StatCard
           title="Batting"
           accent

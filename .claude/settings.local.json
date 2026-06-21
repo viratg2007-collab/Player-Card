@@ -27,7 +27,8 @@
       "Bash(curl -s -o /dev/null -w \"/ HTTP %{http_code}\\\\n\" http://localhost:5173/)",
       "Bash(curl -s -o /dev/null -w \"favicon HTTP %{http_code}\\\\n\" http://localhost:5173/favicon.svg)",
       "Bash(git commit -q -m 'Add match detail view, history format filter, and SVG logo *)",
-      "Bash(git commit -q -m 'Add share innings, swipe-to-delete, and per-format context card *)"
+      "Bash(git commit -q -m 'Add share innings, swipe-to-delete, and per-format context card *)",
+      "Bash(git commit -q -m 'Add season management, personal bests, and CSV export/import *)"
     ]
   }
 }
