@@ -14,7 +14,10 @@
       "Read(//tmp/**)",
       "Bash(pkill -f \"vite\")",
       "Bash(git add *)",
-      "Bash(git commit -q -m 'Scaffold cricket performance tracker v1 *)"
+      "Bash(git commit -q -m 'Scaffold cricket performance tracker v1 *)",
+      "Bash(npm test *)",
+      "Bash(curl -s -o /dev/null -w \"dev server: HTTP %{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(git commit -q -m 'Add Vitest suite, sample data, and design polish *)"
     ]
   }
 }

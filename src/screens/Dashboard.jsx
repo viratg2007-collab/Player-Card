@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useSeasonMatches } from '../hooks/useSeasonMatches.js'
 import { seasonSummary } from '../lib/stats.js'
+import { loadSampleData } from '../db/seed.js'
 import SeasonSelect from '../components/SeasonSelect.jsx'
 import StatCard from '../components/StatCard.jsx'
 import MatchListItem from '../components/MatchListItem.jsx'
@@ -17,20 +18,35 @@ export default function Dashboard() {
         title="No matches yet"
         subtitle="Log your first match to start building your season stats."
         cta={{ to: '/add', label: 'Add your first match' }}
+        secondary={{
+          label: 'Or load a sample season',
+          onClick: async () => {
+            await loadSampleData()
+            window.location.reload()
+          },
+        }}
       />
     )
   }
 
   const s = seasonSummary(matches)
   const recent = matches.slice(0, 4)
+  const seasonLabel = season || 'All seasons'
 
   return (
     <div>
-      <header className="mb-4">
-        <h1 className="text-2xl font-bold text-ink">Season stats</h1>
-        <p className="text-sm text-slate-500">
-          {s.matchesPlayed} {s.matchesPlayed === 1 ? 'match' : 'matches'} played
+      {/* Navy hero — headline figures at a glance */}
+      <header className="mb-5 rounded-2xl bg-gradient-to-br from-ink to-ink-soft p-5 text-white shadow-sm">
+        <p className="text-xs font-medium uppercase tracking-wide text-slate-300">
+          {seasonLabel}
         </p>
+        <h1 className="mt-0.5 text-2xl font-bold">Season stats</h1>
+        <div className="mt-4 flex divide-x divide-white/10">
+          <HeroStat value={s.matchesPlayed} label="Matches" />
+          <HeroStat value={s.batting.totalRuns} label="Runs" />
+          <HeroStat value={s.bowling.wickets} label="Wickets" />
+          <HeroStat value={s.fielding.dismissals} label="Fielding" />
+        </div>
       </header>
 
       <SeasonSelect seasons={seasons} value={season} onChange={chooseSeason} />
@@ -96,9 +112,19 @@ export default function Dashboard() {
   )
 }
 
+function HeroStat({ value, label }) {
+  return (
+    <div className="flex-1 px-3 first:pl-0 last:pr-0">
+      <p className="text-2xl font-bold tabular-nums">{value}</p>
+      <p className="mt-0.5 text-[11px] text-slate-300">{label}</p>
+    </div>
+  )
+}
+
 function Loading() {
   return (
     <div className="space-y-3">
+      <div className="h-32 animate-pulse rounded-2xl bg-white/60" />
       {[0, 1, 2].map((i) => (
         <div key={i} className="h-28 animate-pulse rounded-2xl bg-white/60" />
       ))}

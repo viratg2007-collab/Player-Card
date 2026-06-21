@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-export default function EmptyState({ title, subtitle, cta }) {
+export default function EmptyState({ title, subtitle, cta, secondary }) {
   return (
     <div className="mt-16 flex flex-col items-center text-center">
       <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-slate-200/60">
@@ -18,6 +18,15 @@ export default function EmptyState({ title, subtitle, cta }) {
         >
           {cta.label}
         </Link>
+      )}
+      {secondary && (
+        <button
+          type="button"
+          onClick={secondary.onClick}
+          className="mt-3 text-sm font-medium text-slate-500 underline-offset-2 hover:underline"
+        >
+          {secondary.label}
+        </button>
       )}
     </div>
   )

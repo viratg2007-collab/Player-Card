@@ -2,7 +2,12 @@
 export default function StatCard({ title, accent = false, stats }) {
   return (
     <section className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200/60">
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+      <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+        <span
+          className={
+            'h-2.5 w-2.5 rounded-full ' + (accent ? 'bg-accent' : 'bg-slate-300')
+          }
+        />
         {title}
       </h2>
       <dl className="grid grid-cols-3 gap-x-3 gap-y-4">
