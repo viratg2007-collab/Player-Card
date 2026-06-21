@@ -8,6 +8,7 @@ import SeasonComparison from '../components/SeasonComparison.jsx'
 import DataTools from '../components/DataTools.jsx'
 import ThemeToggle from '../components/ThemeToggle.jsx'
 import ShareSheet from '../components/ShareSheet.jsx'
+import StatCardModal from '../components/StatCardModal.jsx'
 import { TextField } from '../components/form/Field.jsx'
 
 export default function Profile() {
@@ -16,6 +17,7 @@ export default function Profile() {
   const [savedName, setSavedName] = useState('')
   const [currentSeason, setCurrentSeason] = useState('')
   const [shareOpen, setShareOpen] = useState(false)
+  const [imageOpen, setImageOpen] = useState(false)
 
   useEffect(() => {
     getProfile().then((p) => {
@@ -92,19 +94,34 @@ export default function Profile() {
         </div>
       </section>
 
-      <button
-        type="button"
-        onClick={() => setShareOpen(true)}
-        className="mt-3 w-full rounded-xl bg-surface py-3 text-base font-semibold text-content shadow-sm ring-1 ring-line transition active:scale-[0.99]"
-      >
-        Share summary
-      </button>
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => setShareOpen(true)}
+          className="rounded-xl bg-surface py-3 text-sm font-semibold text-content shadow-sm ring-1 ring-line transition active:scale-[0.99]"
+        >
+          Share text
+        </button>
+        <button
+          type="button"
+          onClick={() => setImageOpen(true)}
+          className="rounded-xl bg-accent py-3 text-sm font-semibold text-white shadow-sm transition active:scale-[0.99]"
+        >
+          Share as image
+        </button>
+      </div>
 
       <ShareSheet
         open={shareOpen}
         onClose={() => setShareOpen(false)}
         text={summaryText}
         subject={`${savedName || 'My'} cricket stats — ${seasonLabel}`}
+      />
+      <StatCardModal
+        open={imageOpen}
+        onClose={() => setImageOpen(false)}
+        data={buildStatCardData(savedName, seasonLabel, s, summaryText)}
+        fileName="player-card.png"
       />
 
       <div className="mt-8 mb-2">
@@ -135,6 +152,29 @@ function Stat({ value, label }) {
       <p className="mt-0.5 text-[11px] text-slate-300">{label}</p>
     </div>
   )
+}
+
+function buildStatCardData(name, seasonLabel, s, shareText) {
+  return {
+    name: name || 'Cricketer',
+    seasonLabel,
+    shareText,
+    matches: s.matchesPlayed,
+    runs: s.batting.totalRuns,
+    battingAverage: s.batting.average,
+    strikeRate: s.batting.strikeRate,
+    highest: s.batting.highest,
+    inningsCount: s.batting.inningsCount,
+    fifties: s.batting.fifties,
+    hundreds: s.batting.hundreds,
+    wickets: s.bowling.wickets,
+    bowlingAverage: s.bowling.average,
+    economy: s.bowling.economy,
+    best: s.bowling.best,
+    catches: s.fielding.catches,
+    runOuts: s.fielding.runOuts,
+    stumpings: s.fielding.stumpings,
+  }
 }
 
 function buildSummary(name, seasonLabel, s) {
