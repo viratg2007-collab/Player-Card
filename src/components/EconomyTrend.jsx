@@ -35,7 +35,7 @@ export default function EconomyTrend({ matches }) {
           return (
             <div
               key={i}
-              className="group flex flex-1 flex-col items-center justify-end"
+              className="group flex h-full flex-1 flex-col items-center justify-end"
               title={`${sp.econ.toFixed(2)} vs ${sp.opposition}`}
             >
               <span className="mb-1 text-[10px] font-semibold tabular-nums text-muted opacity-0 transition group-hover:opacity-100">

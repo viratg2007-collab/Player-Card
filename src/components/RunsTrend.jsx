@@ -41,7 +41,7 @@ export default function RunsTrend({ matches }) {
           return (
             <div
               key={i}
-              className="group flex flex-1 flex-col items-center justify-end"
+              className="group flex h-full flex-1 flex-col items-center justify-end"
               title={`${inn.runs}${inn.notOut ? '*' : ''} vs ${inn.label}`}
             >
               <span className="mb-1 text-[10px] font-semibold tabular-nums text-muted opacity-0 transition group-hover:opacity-100">
