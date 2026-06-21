@@ -4,6 +4,7 @@ const tabs = [
   { to: '/', label: 'Stats', end: true, icon: BarsIcon },
   { to: '/history', label: 'Matches', end: false, icon: ListIcon },
   { to: '/add', label: 'Add', end: false, icon: PlusIcon, primary: true },
+  { to: '/friends', label: 'Friends', end: false, icon: FriendsIcon },
   { to: '/profile', label: 'Profile', end: false, icon: UserIcon },
 ]
 
@@ -85,6 +86,17 @@ function UserIcon() {
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
       <circle cx="12" cy="8" r="4" />
       <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+    </svg>
+  )
+}
+
+function FriendsIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="9" cy="9" r="3.2" />
+      <path d="M3 19c0-3 2.7-4.6 6-4.6s6 1.6 6 4.6" />
+      <path d="M16 5.2a3 3 0 0 1 0 5.8" />
+      <path d="M17.5 14.2c2.3.4 3.8 1.8 3.8 4.3" />
     </svg>
   )
 }
