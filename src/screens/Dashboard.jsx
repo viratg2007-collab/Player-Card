@@ -4,6 +4,7 @@ import { seasonSummary } from '../lib/stats.js'
 import { loadSampleData } from '../db/seed.js'
 import SeasonSelect from '../components/SeasonSelect.jsx'
 import StatCard from '../components/StatCard.jsx'
+import RunsTrend from '../components/RunsTrend.jsx'
 import MatchListItem from '../components/MatchListItem.jsx'
 import EmptyState from '../components/EmptyState.jsx'
 
@@ -64,6 +65,8 @@ export default function Dashboard() {
             { label: '50s / 100s', value: `${s.batting.fifties}/${s.batting.hundreds}` },
           ]}
         />
+
+        <RunsTrend matches={matches} />
 
         <StatCard
           title="Bowling"
