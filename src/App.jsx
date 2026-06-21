@@ -6,7 +6,7 @@ import BottomNav from './components/BottomNav.jsx'
 // fixed bottom tab bar.
 export default function App() {
   return (
-    <div className="mx-auto flex min-h-full max-w-md flex-col bg-slate-100">
+    <div className="mx-auto flex min-h-full max-w-md flex-col bg-appbg">
       <AppHeader />
       <main className="flex-1 px-4 pb-28 pt-5">
         <Outlet />

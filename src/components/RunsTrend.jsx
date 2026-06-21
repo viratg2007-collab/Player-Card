@@ -23,13 +23,13 @@ export default function RunsTrend({ matches }) {
   const max = Math.max(...innings.map((i) => i.runs), 1)
 
   return (
-    <section className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200/60">
+    <section className="rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-line/60">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+        <h2 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted">
           <span className="h-2.5 w-2.5 rounded-full bg-accent" />
           Runs per innings
         </h2>
-        <span className="text-[11px] text-slate-400">
+        <span className="text-[11px] text-muted">
           {innings.length} innings
         </span>
       </div>
@@ -44,7 +44,7 @@ export default function RunsTrend({ matches }) {
               className="group flex flex-1 flex-col items-center justify-end"
               title={`${inn.runs}${inn.notOut ? '*' : ''} vs ${inn.label}`}
             >
-              <span className="mb-1 text-[10px] font-semibold tabular-nums text-slate-400 opacity-0 transition group-hover:opacity-100">
+              <span className="mb-1 text-[10px] font-semibold tabular-nums text-muted opacity-0 transition group-hover:opacity-100">
                 {inn.runs}
                 {inn.notOut ? '*' : ''}
               </span>
@@ -60,7 +60,7 @@ export default function RunsTrend({ matches }) {
         })}
       </div>
 
-      <div className="mt-2 flex justify-between text-[10px] text-slate-400">
+      <div className="mt-2 flex justify-between text-[10px] text-muted">
         <span>Oldest</span>
         <span>Latest</span>
       </div>

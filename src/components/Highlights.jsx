@@ -30,8 +30,8 @@ export default function Highlights({ matches }) {
   }
 
   return (
-    <section className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200/60">
-      <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+    <section className="rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-line/60">
+      <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted">
         <span className="h-2.5 w-2.5 rounded-full bg-accent" />
         Personal bests
       </h2>
@@ -39,8 +39,8 @@ export default function Highlights({ matches }) {
         {items.map((it) => (
           <div key={it.label}>
             <p className="text-xl font-semibold tabular-nums text-accent">{it.value}</p>
-            <p className="mt-0.5 text-[11px] font-medium text-slate-600">{it.label}</p>
-            {it.sub && <p className="text-[11px] leading-tight text-slate-400">{it.sub}</p>}
+            <p className="mt-0.5 text-[11px] font-medium text-muted">{it.label}</p>
+            {it.sub && <p className="text-[11px] leading-tight text-muted">{it.sub}</p>}
           </div>
         ))}
       </div>

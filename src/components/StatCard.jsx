@@ -1,8 +1,8 @@
 // A titled card holding a grid of stats. Each stat is { label, value, hint? }.
 export default function StatCard({ title, accent = false, stats }) {
   return (
-    <section className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200/60">
-      <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+    <section className="rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-line/60">
+      <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted">
         <span
           className={
             'h-2.5 w-2.5 rounded-full ' + (accent ? 'bg-accent' : 'bg-slate-300')
@@ -16,12 +16,12 @@ export default function StatCard({ title, accent = false, stats }) {
             <dd
               className={
                 'text-xl font-semibold tabular-nums ' +
-                (accent ? 'text-accent' : 'text-ink')
+                (accent ? 'text-accent' : 'text-content')
               }
             >
               {s.value}
             </dd>
-            <dt className="mt-0.5 text-[11px] leading-tight text-slate-500">
+            <dt className="mt-0.5 text-[11px] leading-tight text-muted">
               {s.label}
             </dt>
           </div>

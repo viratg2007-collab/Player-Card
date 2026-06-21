@@ -27,7 +27,7 @@ export default function SeasonManager({ seasons, currentSeason }) {
   }
 
   return (
-    <section className="space-y-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200/60">
+    <section className="space-y-4 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-line/60">
       <div className="space-y-2">
         <TextField
           label="Current season (new matches default to this)"
@@ -38,18 +38,18 @@ export default function SeasonManager({ seasons, currentSeason }) {
         <button
           type="button"
           onClick={saveCurrent}
-          className="w-full rounded-xl bg-slate-100 py-2.5 text-sm font-semibold text-ink transition active:scale-[0.99]"
+          className="w-full rounded-xl bg-surface2 py-2.5 text-sm font-semibold text-content transition active:scale-[0.99]"
         >
           Set current season
         </button>
         {currentNote && (
-          <p className="text-center text-xs text-slate-500">{currentNote}</p>
+          <p className="text-center text-xs text-muted">{currentNote}</p>
         )}
       </div>
 
       {seasons.length > 0 && (
-        <div className="space-y-2 border-t border-slate-100 pt-4">
-          <p className="text-sm font-medium text-slate-600">Rename a season</p>
+        <div className="space-y-2 border-t border-line pt-4">
+          <p className="text-sm font-medium text-muted">Rename a season</p>
           <div className="grid grid-cols-2 gap-3">
             <SelectField label="From" value={from} onChange={setFrom} options={seasons} />
             <TextField label="To" value={to} onChange={setTo} placeholder="New name" />
@@ -58,7 +58,7 @@ export default function SeasonManager({ seasons, currentSeason }) {
             type="button"
             onClick={handleRename}
             disabled={busy || !to.trim() || from === to.trim()}
-            className="w-full rounded-xl bg-slate-100 py-2.5 text-sm font-semibold text-ink transition active:scale-[0.99] disabled:opacity-40"
+            className="w-full rounded-xl bg-surface2 py-2.5 text-sm font-semibold text-content transition active:scale-[0.99] disabled:opacity-40"
           >
             Rename season
           </button>

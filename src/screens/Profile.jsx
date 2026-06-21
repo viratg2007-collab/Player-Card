@@ -4,7 +4,9 @@ import { useSeasonMatches } from '../hooks/useSeasonMatches.js'
 import { seasonSummary } from '../lib/stats.js'
 import SeasonSelect from '../components/SeasonSelect.jsx'
 import SeasonManager from '../components/SeasonManager.jsx'
+import SeasonComparison from '../components/SeasonComparison.jsx'
 import DataTools from '../components/DataTools.jsx'
+import ThemeToggle from '../components/ThemeToggle.jsx'
 import { TextField } from '../components/form/Field.jsx'
 
 export default function Profile() {
@@ -50,10 +52,10 @@ export default function Profile() {
   return (
     <div>
       <header className="mb-4">
-        <h1 className="text-2xl font-bold text-ink">Profile</h1>
+        <h1 className="text-2xl font-bold text-content">Profile</h1>
       </header>
 
-      <section className="space-y-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200/60">
+      <section className="space-y-3 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-line/60">
         <TextField
           label="Player name"
           value={name}
@@ -70,8 +72,15 @@ export default function Profile() {
         </button>
       </section>
 
-      <div className="mt-6 mb-2 flex items-center justify-between">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+      <div className="mt-8 mb-2">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
+          Appearance
+        </h2>
+      </div>
+      <ThemeToggle />
+
+      <div className="mt-8 mb-2 flex items-center justify-between">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
           Shareable summary
         </h2>
       </div>
@@ -99,23 +108,27 @@ export default function Profile() {
       <button
         type="button"
         onClick={handleShare}
-        className="mt-3 w-full rounded-xl bg-white py-3 text-base font-semibold text-ink shadow-sm ring-1 ring-slate-200 transition active:scale-[0.99]"
+        className="mt-3 w-full rounded-xl bg-surface py-3 text-base font-semibold text-content shadow-sm ring-1 ring-line transition active:scale-[0.99]"
       >
         Share summary
       </button>
       {shareNote && (
-        <p className="mt-2 text-center text-sm text-slate-500">{shareNote}</p>
+        <p className="mt-2 text-center text-sm text-muted">{shareNote}</p>
       )}
 
       <div className="mt-8 mb-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
           Seasons
         </h2>
       </div>
       <SeasonManager seasons={seasons} currentSeason={currentSeason} />
 
+      <div className="mt-4">
+        <SeasonComparison matches={allMatches} />
+      </div>
+
       <div className="mt-8 mb-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
           Data
         </h2>
       </div>

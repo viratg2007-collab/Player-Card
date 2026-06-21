@@ -20,7 +20,7 @@ export default function FilterPills({ options, value, onChange, allLabel = 'All'
                 'whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium transition ' +
                 (active
                   ? 'bg-accent text-white'
-                  : 'bg-white text-slate-500 ring-1 ring-slate-200')
+                  : 'bg-surface text-muted ring-1 ring-line')
               }
             >
               {opt || allLabel}

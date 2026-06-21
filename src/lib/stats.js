@@ -185,6 +185,25 @@ export function statsByFormat(matches) {
     .sort((a, b) => b.matches - a.matches || b.runs - a.runs)
 }
 
+// Per-season breakdown for comparing seasons side by side. One row per season,
+// most recent first.
+export function statsBySeason(matches) {
+  return listSeasons(matches).map((season) => {
+    const ms = matches.filter((m) => m.season === season)
+    const bat = battingStats(ms)
+    const bowl = bowlingStats(ms)
+    return {
+      season,
+      matches: ms.length,
+      runs: bat.totalRuns,
+      battingAverage: bat.average,
+      highest: bat.highest,
+      wickets: bowl.wickets,
+      best: bowl.best,
+    }
+  })
+}
+
 // Unique season labels found across matches, most recent first (by latest match
 // date within each season).
 export function listSeasons(matches) {

@@ -8,23 +8,23 @@ export default function FormatBreakdown({ matches }) {
   if (rows.length < 2) return null
 
   return (
-    <section className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200/60">
-      <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+    <section className="rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-line/60">
+      <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted">
         <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
         By format
       </h2>
 
       <div className="grid grid-cols-[1fr_auto_auto_auto] gap-x-3 gap-y-2 text-sm">
-        <span className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
+        <span className="text-[11px] font-medium uppercase tracking-wide text-muted">
           Format
         </span>
-        <span className="text-right text-[11px] font-medium uppercase tracking-wide text-slate-400">
+        <span className="text-right text-[11px] font-medium uppercase tracking-wide text-muted">
           M
         </span>
-        <span className="text-right text-[11px] font-medium uppercase tracking-wide text-slate-400">
+        <span className="text-right text-[11px] font-medium uppercase tracking-wide text-muted">
           Runs
         </span>
-        <span className="text-right text-[11px] font-medium uppercase tracking-wide text-slate-400">
+        <span className="text-right text-[11px] font-medium uppercase tracking-wide text-muted">
           Wkts
         </span>
 
@@ -39,10 +39,10 @@ export default function FormatBreakdown({ matches }) {
 function FormatRow({ row }) {
   return (
     <>
-      <span className="truncate font-medium text-ink">{row.format}</span>
-      <span className="text-right tabular-nums text-slate-600">{row.matches}</span>
-      <span className="text-right font-semibold tabular-nums text-ink">{row.runs}</span>
-      <span className="text-right font-semibold tabular-nums text-ink">{row.wickets}</span>
+      <span className="truncate font-medium text-content">{row.format}</span>
+      <span className="text-right tabular-nums text-muted">{row.matches}</span>
+      <span className="text-right font-semibold tabular-nums text-content">{row.runs}</span>
+      <span className="text-right font-semibold tabular-nums text-content">{row.wickets}</span>
     </>
   )
 }

@@ -19,7 +19,7 @@ export default function SeasonSelect({ seasons, value, onChange }) {
                 'whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition ' +
                 (active
                   ? 'bg-ink text-white'
-                  : 'bg-white text-slate-500 ring-1 ring-slate-200')
+                  : 'bg-surface text-muted ring-1 ring-line')
               }
             >
               {s || 'All seasons'}

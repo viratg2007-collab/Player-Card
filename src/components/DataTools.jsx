@@ -63,13 +63,13 @@ export default function DataTools({ hasData }) {
   }
 
   return (
-    <section className="space-y-2 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200/60">
+    <section className="space-y-2 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-line/60">
       <div className="grid grid-cols-2 gap-2">
         <button
           type="button"
           onClick={handleExport}
           disabled={busy}
-          className="rounded-xl bg-slate-100 py-2.5 text-sm font-semibold text-ink transition active:scale-[0.99] disabled:opacity-50"
+          className="rounded-xl bg-surface2 py-2.5 text-sm font-semibold text-content transition active:scale-[0.99] disabled:opacity-50"
         >
           Export CSV
         </button>
@@ -77,7 +77,7 @@ export default function DataTools({ hasData }) {
           type="button"
           onClick={() => fileRef.current?.click()}
           disabled={busy}
-          className="rounded-xl bg-slate-100 py-2.5 text-sm font-semibold text-ink transition active:scale-[0.99] disabled:opacity-50"
+          className="rounded-xl bg-surface2 py-2.5 text-sm font-semibold text-content transition active:scale-[0.99] disabled:opacity-50"
         >
           Import CSV
         </button>
@@ -94,7 +94,7 @@ export default function DataTools({ hasData }) {
         type="button"
         onClick={handleLoadSample}
         disabled={busy}
-        className="w-full rounded-xl bg-slate-100 py-2.5 text-sm font-semibold text-ink transition active:scale-[0.99] disabled:opacity-50"
+        className="w-full rounded-xl bg-surface2 py-2.5 text-sm font-semibold text-content transition active:scale-[0.99] disabled:opacity-50"
       >
         Load sample season
       </button>
@@ -107,8 +107,8 @@ export default function DataTools({ hasData }) {
         Clear all data
       </button>
 
-      {note && <p className="text-center text-xs text-slate-500">{note}</p>}
-      <p className="px-1 pt-1 text-xs text-slate-400">
+      {note && <p className="text-center text-xs text-muted">{note}</p>}
+      <p className="px-1 pt-1 text-xs text-muted">
         Everything is stored only on this device, in your browser.
       </p>
     </section>

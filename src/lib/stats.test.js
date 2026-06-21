@@ -6,6 +6,7 @@ import {
   seasonSummary,
   listSeasons,
   statsByFormat,
+  statsBySeason,
   highlights,
 } from './stats.js'
 import { EM_DASH } from '../constants.js'
@@ -223,6 +224,24 @@ describe('highlights', () => {
   it('tracks most sixes only when there are any', () => {
     expect(highlights([bk({ runs: 10, sixes: 0 }, 'A')]).mostSixes).toBeNull()
     expect(highlights([bk({ runs: 30, sixes: 3 }, 'A')]).mostSixes.sixes).toBe(3)
+  })
+})
+
+describe('statsBySeason', () => {
+  const row = (season, runs, wickets) => ({
+    season,
+    date: `${season}-06-01`,
+    batting: { didBat: true, runs, balls: runs, howOut: 'caught', fours: 0, sixes: 0 },
+    bowling: { didBowl: true, overs: 4, maidens: 0, runsConceded: 20, wickets },
+  })
+
+  it('returns one row per season, most recent first', () => {
+    const rows = statsBySeason([row('2025', 30, 1), row('2026', 50, 2), row('2025', 20, 0)])
+    expect(rows.map((r) => r.season)).toEqual(['2026', '2025'])
+    const s25 = rows.find((r) => r.season === '2025')
+    expect(s25.matches).toBe(2)
+    expect(s25.runs).toBe(50)
+    expect(s25.wickets).toBe(1)
   })
 })
 

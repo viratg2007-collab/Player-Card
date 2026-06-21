@@ -50,7 +50,7 @@ export default function MatchDetail() {
   if (missing) {
     return (
       <div className="mt-16 text-center">
-        <p className="text-ink">That match could not be found.</p>
+        <p className="text-content">That match could not be found.</p>
         <Link to="/history" className="mt-3 inline-block text-sm font-medium text-accent">
           Back to matches
         </Link>
@@ -58,7 +58,7 @@ export default function MatchDetail() {
     )
   }
 
-  if (!match) return <div className="h-64 animate-pulse rounded-2xl bg-white/60" />
+  if (!match) return <div className="h-64 animate-pulse rounded-2xl bg-surface/60" />
 
   const { batting, bowling, fielding } = match
   const notOut = batting.howOut === 'notout'
@@ -83,7 +83,7 @@ export default function MatchDetail() {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="text-sm font-medium text-slate-500"
+          className="text-sm font-medium text-muted"
         >
           ‹ Back
         </button>
@@ -91,7 +91,7 @@ export default function MatchDetail() {
           <button
             type="button"
             onClick={handleShare}
-            className="text-sm font-semibold text-slate-500"
+            className="text-sm font-semibold text-muted"
           >
             Share
           </button>
@@ -105,14 +105,14 @@ export default function MatchDetail() {
       </header>
 
       <div className="mb-5">
-        <h1 className="text-2xl font-bold text-ink">
+        <h1 className="text-2xl font-bold text-content">
           {match.opposition || 'Unknown opposition'}
         </h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-muted">
           {formatDate(match.date)} · {formatLabel(match)}
           {match.venue ? ` · ${match.venue}` : ''}
         </p>
-        <span className="mt-2 inline-block rounded-full bg-slate-200 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+        <span className="mt-2 inline-block rounded-full bg-surface2 px-2.5 py-0.5 text-xs font-medium text-muted">
           {match.season}
         </span>
       </div>
@@ -183,7 +183,7 @@ export default function MatchDetail() {
       </div>
 
       {shareNote && (
-        <p className="mt-4 text-center text-sm text-slate-500">{shareNote}</p>
+        <p className="mt-4 text-center text-sm text-muted">{shareNote}</p>
       )}
 
       <Link
@@ -198,8 +198,8 @@ export default function MatchDetail() {
 
 function DetailCard({ title, accent = false, children }) {
   return (
-    <section className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200/60">
-      <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+    <section className="rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-line/60">
+      <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted">
         <span className={'h-2.5 w-2.5 rounded-full ' + (accent ? 'bg-accent' : 'bg-slate-300')} />
         {title}
       </h2>
@@ -210,11 +210,11 @@ function DetailCard({ title, accent = false, children }) {
 
 function Rows({ rows }) {
   return (
-    <dl className="divide-y divide-slate-100">
+    <dl className="divide-y divide-line">
       {rows.map(([label, value]) => (
         <div key={label} className="flex items-center justify-between py-2">
-          <dt className="text-sm text-slate-500">{label}</dt>
-          <dd className="text-sm font-semibold tabular-nums text-ink">{value}</dd>
+          <dt className="text-sm text-muted">{label}</dt>
+          <dd className="text-sm font-semibold tabular-nums text-content">{value}</dd>
         </div>
       ))}
     </dl>
@@ -222,7 +222,7 @@ function Rows({ rows }) {
 }
 
 function Muted({ children }) {
-  return <p className="text-sm text-slate-400">{children}</p>
+  return <p className="text-sm text-muted">{children}</p>
 }
 
 function formatLabel(m) {

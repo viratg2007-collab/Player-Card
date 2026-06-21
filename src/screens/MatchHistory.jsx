@@ -44,8 +44,8 @@ export default function MatchHistory() {
   return (
     <div>
       <header className="mb-4">
-        <h1 className="text-2xl font-bold text-ink">Matches</h1>
-        <p className="text-sm text-slate-500">
+        <h1 className="text-2xl font-bold text-content">Matches</h1>
+        <p className="text-sm text-muted">
           {visible.length} {visible.length === 1 ? 'match' : 'matches'}
           {format ? ` · ${format}` : ''}
         </p>
@@ -55,7 +55,7 @@ export default function MatchHistory() {
       <FilterPills options={formats} value={format} onChange={setFormat} allLabel="All formats" />
 
       {visible.length === 0 ? (
-        <p className="rounded-xl bg-white px-4 py-3 text-sm text-slate-500 ring-1 ring-slate-200/60">
+        <p className="rounded-xl bg-surface px-4 py-3 text-sm text-muted ring-1 ring-line/60">
           No matches to show.
         </p>
       ) : (
@@ -65,7 +65,7 @@ export default function MatchHistory() {
               <SwipeableMatchRow key={m.id} match={m} onDelete={handleDelete} />
             ))}
           </div>
-          <p className="mt-3 text-center text-xs text-slate-400">
+          <p className="mt-3 text-center text-xs text-muted">
             Swipe a match left to delete
           </p>
         </>
@@ -78,7 +78,7 @@ function Loading() {
   return (
     <div className="space-y-2">
       {[0, 1, 2, 3].map((i) => (
-        <div key={i} className="h-16 animate-pulse rounded-xl bg-white/60" />
+        <div key={i} className="h-16 animate-pulse rounded-xl bg-surface/60" />
       ))}
     </div>
   )

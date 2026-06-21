@@ -18,28 +18,28 @@ export default function MatchListItem({ match }) {
   return (
     <Link
       to={`/match/${match.id}`}
-      className="flex items-center justify-between rounded-xl bg-white px-4 py-3 shadow-sm ring-1 ring-slate-200/60 transition active:scale-[0.99]"
+      className="flex items-center justify-between rounded-xl bg-surface px-4 py-3 shadow-sm ring-1 ring-line/60 transition active:scale-[0.99]"
     >
       <div className="min-w-0">
-        <p className="truncate font-semibold text-ink">
+        <p className="truncate font-semibold text-content">
           {match.opposition || 'Unknown opposition'}
         </p>
-        <p className="mt-0.5 text-xs text-slate-500">
+        <p className="mt-0.5 text-xs text-muted">
           {formatDate(match.date)} · {match.format}
           {match.venue ? ` · ${match.venue}` : ''}
         </p>
       </div>
       <div className="ml-3 shrink-0 text-right">
         {battedLine && (
-          <p className="text-sm font-semibold tabular-nums text-ink">
+          <p className="text-sm font-semibold tabular-nums text-content">
             {battedLine}
           </p>
         )}
         {bowledLine && (
-          <p className="text-xs tabular-nums text-slate-500">{bowledLine}</p>
+          <p className="text-xs tabular-nums text-muted">{bowledLine}</p>
         )}
         {!battedLine && !bowledLine && (
-          <p className="text-xs text-slate-400">Fielding only</p>
+          <p className="text-xs text-muted">Fielding only</p>
         )}
       </div>
     </Link>

@@ -2,14 +2,14 @@
 // plain — labels above controls, navy focus ring, mobile-friendly tap targets.
 
 const inputBase =
-  'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-ink ' +
+  'w-full rounded-xl border border-line bg-surface px-3 py-2.5 text-content ' +
   'outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30 ' +
-  'placeholder:text-slate-400'
+  'placeholder:text-muted'
 
 export function TextField({ label, value, onChange, type = 'text', ...rest }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-sm font-medium text-slate-600">{label}</span>
+      <span className="mb-1 block text-sm font-medium text-muted">{label}</span>
       <input
         type={type}
         value={value}
@@ -24,7 +24,7 @@ export function TextField({ label, value, onChange, type = 'text', ...rest }) {
 export function NumberField({ label, value, onChange, min = 0, step = 1, ...rest }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-sm font-medium text-slate-600">{label}</span>
+      <span className="mb-1 block text-sm font-medium text-muted">{label}</span>
       <input
         type="number"
         inputMode="numeric"
@@ -42,7 +42,7 @@ export function NumberField({ label, value, onChange, min = 0, step = 1, ...rest
 export function SelectField({ label, value, onChange, options }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-sm font-medium text-slate-600">{label}</span>
+      <span className="mb-1 block text-sm font-medium text-muted">{label}</span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -66,8 +66,8 @@ export function SelectField({ label, value, onChange, options }) {
 export function ToggleField({ label, value, onChange }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-base font-semibold text-ink">{label}</span>
-      <div className="inline-flex rounded-xl bg-slate-100 p-0.5">
+      <span className="text-base font-semibold text-content">{label}</span>
+      <div className="inline-flex rounded-xl bg-surface2 p-0.5">
         {[
           { v: true, t: 'Yes' },
           { v: false, t: 'No' },
@@ -79,8 +79,8 @@ export function ToggleField({ label, value, onChange }) {
             className={
               'rounded-lg px-4 py-1.5 text-sm font-medium transition ' +
               (value === v
-                ? 'bg-white text-ink shadow-sm'
-                : 'text-slate-500')
+                ? 'bg-surface text-content shadow-sm'
+                : 'text-muted')
             }
           >
             {t}

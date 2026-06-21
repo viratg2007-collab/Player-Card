@@ -2,7 +2,18 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createHashRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
+import { initTheme } from './lib/theme.js'
 import App from './App.jsx'
+
+// Apply the saved theme before first paint to avoid a flash.
+initTheme()
+
+// Register the offline service worker in production builds.
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {})
+  })
+}
 import Dashboard from './screens/Dashboard.jsx'
 import MatchHistory from './screens/MatchHistory.jsx'
 import MatchForm from './screens/MatchForm.jsx'

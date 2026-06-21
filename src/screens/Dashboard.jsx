@@ -98,7 +98,7 @@ export default function Dashboard() {
 
       <section className="mt-6">
         <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
             Recent matches
           </h2>
           <Link to="/history" className="text-sm font-medium text-accent">
@@ -106,7 +106,7 @@ export default function Dashboard() {
           </Link>
         </div>
         {recent.length === 0 ? (
-          <p className="rounded-xl bg-white px-4 py-3 text-sm text-slate-500 ring-1 ring-slate-200/60">
+          <p className="rounded-xl bg-surface px-4 py-3 text-sm text-muted ring-1 ring-line/60">
             No matches in this season yet.
           </p>
         ) : (
@@ -133,9 +133,9 @@ function HeroStat({ value, label }) {
 function Loading() {
   return (
     <div className="space-y-3">
-      <div className="h-32 animate-pulse rounded-2xl bg-white/60" />
+      <div className="h-32 animate-pulse rounded-2xl bg-surface/60" />
       {[0, 1, 2].map((i) => (
-        <div key={i} className="h-28 animate-pulse rounded-2xl bg-white/60" />
+        <div key={i} className="h-28 animate-pulse rounded-2xl bg-surface/60" />
       ))}
     </div>
   )

@@ -9,7 +9,7 @@ const tabs = [
 
 export default function BottomNav() {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-10 border-t border-slate-200 bg-white/95 backdrop-blur">
+    <nav className="fixed inset-x-0 bottom-0 z-10 border-t border-line bg-surface/95 backdrop-blur">
       <div className="mx-auto flex max-w-md items-stretch justify-around px-2 pb-[env(safe-area-inset-bottom)]">
         {tabs.map(({ to, label, end, icon: Icon, primary }) => (
           <NavLink
@@ -23,7 +23,7 @@ export default function BottomNav() {
                   ? 'text-accent'
                   : isActive
                     ? 'text-accent'
-                    : 'text-slate-400 hover:text-slate-600',
+                    : 'text-muted hover:text-muted',
               ].join(' ')
             }
           >

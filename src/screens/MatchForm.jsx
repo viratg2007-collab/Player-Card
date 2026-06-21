@@ -57,7 +57,7 @@ export default function MatchForm() {
     }
   }, [id, isEdit])
 
-  if (!form) return <div className="h-64 animate-pulse rounded-2xl bg-white/60" />
+  if (!form) return <div className="h-64 animate-pulse rounded-2xl bg-surface/60" />
 
   const set = (path, value) =>
     setForm((f) => {
@@ -85,13 +85,13 @@ export default function MatchForm() {
   return (
     <form onSubmit={handleSubmit} className="pb-4">
       <header className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-ink">
+        <h1 className="text-2xl font-bold text-content">
           {isEdit ? 'Edit match' : 'Add match'}
         </h1>
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="text-sm font-medium text-slate-500"
+          className="text-sm font-medium text-muted"
         >
           Cancel
         </button>
@@ -227,7 +227,7 @@ export default function MatchForm() {
 
         {/* Fielding */}
         <Card>
-          <h2 className="mb-3 text-base font-semibold text-ink">Fielding</h2>
+          <h2 className="mb-3 text-base font-semibold text-content">Fielding</h2>
           <div className="grid grid-cols-3 gap-3">
             <NumberField
               label="Catches"
@@ -272,7 +272,7 @@ export default function MatchForm() {
 
 function Card({ children }) {
   return (
-    <section className="space-y-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200/60">
+    <section className="space-y-3 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-line/60">
       {children}
     </section>
   )

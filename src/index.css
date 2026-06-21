@@ -4,6 +4,22 @@
 
 :root {
   color-scheme: light;
+  --appbg: 241 245 249; /* slate-100 */
+  --surface: 255 255 255; /* white */
+  --surface2: 241 245 249; /* slate-100 */
+  --content: 15 23 42; /* slate-900 */
+  --muted: 100 116 139; /* slate-500 */
+  --line: 226 232 240; /* slate-200 */
+}
+
+.dark {
+  color-scheme: dark;
+  --appbg: 2 6 23; /* slate-950 */
+  --surface: 30 41 59; /* slate-800 */
+  --surface2: 51 65 85; /* slate-700 */
+  --content: 241 245 249; /* slate-100 */
+  --muted: 148 163 184; /* slate-400 */
+  --line: 51 65 85; /* slate-700 */
 }
 
 html,
@@ -14,8 +30,8 @@ body,
 
 body {
   margin: 0;
-  background-color: #f1f5f9; /* slate-100 */
-  color: #0f172a; /* slate-900 */
+  background-color: rgb(var(--appbg));
+  color: rgb(var(--content));
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

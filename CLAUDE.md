@@ -170,6 +170,33 @@ decisions friendly to that future:
   future native web-view shell) without server route config.
 - No web-only/server dependencies that would block a native wrapper.
 
+## Theming (light / dark)
+
+Colors are split into two groups in `tailwind.config.js`:
+
+- **Fixed brand colors** — `ink` (navy) and `accent` (indigo). The navy hero,
+  active pills, and accent numbers use these and look right in both themes.
+- **Semantic tokens** backed by CSS variables in `index.css` — `appbg`,
+  `surface`, `surface2`, `content`, `muted`, `line`. These flip between light
+  and dark via the `.dark` class on `<html>`.
+
+**Always use the semantic tokens for surfaces/text** (`bg-surface`,
+`text-content`, `text-muted`, `ring-line`, …) — never hard-code `bg-white` /
+`text-slate-*` for themed UI, or dark mode breaks. `src/lib/theme.js` manages
+the preference (`light` | `dark` | `system`, persisted in localStorage);
+`initTheme()` runs in `main.jsx` before paint; `ThemeToggle` lives in Profile →
+Appearance.
+
+## PWA / installability
+
+`public/manifest.webmanifest` + `public/sw.js` make the app installable and
+offline-capable (cache-first shell, navigation fallback to `index.html`). The
+service worker is registered only in production builds (`import.meta.env.PROD`)
+so dev isn't affected — test it via `npm run build && npm run preview`. Bump the
+`CACHE` constant in `sw.js` when shipping changes that must invalidate the
+offline cache. Icons are currently SVG; PNG icons (192/512) are a future nicety
+for the widest install support.
+
 ## Conventions
 
 - Mobile-first. Bottom tab navigation (Dashboard / History / Add / Profile).
