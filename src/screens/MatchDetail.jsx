@@ -5,6 +5,7 @@ import { dismissalLabel, EM_DASH } from '../constants.js'
 import { ballsToOvers, oversToBalls, oversToDecimal } from '../lib/overs.js'
 import { statsByFormat, battingStats } from '../lib/stats.js'
 import { matchSummary } from '../lib/matchSummary.js'
+import ShareSheet from '../components/ShareSheet.jsx'
 
 // Read-only view of a single match, reached by tapping a match in a list.
 // Editing is one tap away via the Edit button.
@@ -15,7 +16,7 @@ export default function MatchDetail() {
   const [missing, setMissing] = useState(false)
   const [allMatches, setAllMatches] = useState([])
   const [playerName, setPlayerName] = useState('')
-  const [shareNote, setShareNote] = useState('')
+  const [shareOpen, setShareOpen] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -30,22 +31,6 @@ export default function MatchDetail() {
       active = false
     }
   }, [id])
-
-  async function handleShare() {
-    if (!match) return
-    const text = matchSummary(match, playerName)
-    try {
-      if (navigator.share) {
-        await navigator.share({ text })
-        return
-      }
-      await navigator.clipboard.writeText(text)
-      setShareNote('Copied to clipboard')
-      setTimeout(() => setShareNote(''), 2000)
-    } catch {
-      // Share sheet dismissed — nothing to do.
-    }
-  }
 
   if (missing) {
     return (
@@ -97,7 +82,7 @@ export default function MatchDetail() {
         <div className="flex items-center gap-4">
           <button
             type="button"
-            onClick={handleShare}
+            onClick={() => setShareOpen(true)}
             className="text-sm font-semibold text-muted"
           >
             Share
@@ -209,16 +194,19 @@ export default function MatchDetail() {
         )}
       </div>
 
-      {shareNote && (
-        <p className="mt-4 text-center text-sm text-muted">{shareNote}</p>
-      )}
-
       <Link
         to={`/match/${id}/edit`}
         className="mt-6 block w-full rounded-xl bg-accent py-3 text-center text-base font-semibold text-white shadow-sm active:scale-[0.99]"
       >
         Edit match
       </Link>
+
+      <ShareSheet
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        text={matchSummary(match, playerName)}
+        subject={`${playerName || 'My'} — vs ${match.opposition || 'match'}`}
+      />
     </div>
   )
 }

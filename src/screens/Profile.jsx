@@ -7,6 +7,7 @@ import SeasonManager from '../components/SeasonManager.jsx'
 import SeasonComparison from '../components/SeasonComparison.jsx'
 import DataTools from '../components/DataTools.jsx'
 import ThemeToggle from '../components/ThemeToggle.jsx'
+import ShareSheet from '../components/ShareSheet.jsx'
 import { TextField } from '../components/form/Field.jsx'
 
 export default function Profile() {
@@ -14,7 +15,7 @@ export default function Profile() {
   const [name, setName] = useState('')
   const [savedName, setSavedName] = useState('')
   const [currentSeason, setCurrentSeason] = useState('')
-  const [shareNote, setShareNote] = useState('')
+  const [shareOpen, setShareOpen] = useState(false)
 
   useEffect(() => {
     getProfile().then((p) => {
@@ -32,20 +33,6 @@ export default function Profile() {
   const s = seasonSummary(matches)
   const seasonLabel = season || 'All seasons'
   const summaryText = buildSummary(savedName, seasonLabel, s)
-
-  async function handleShare() {
-    try {
-      if (navigator.share) {
-        await navigator.share({ text: summaryText })
-        return
-      }
-      await navigator.clipboard.writeText(summaryText)
-      setShareNote('Copied to clipboard')
-      setTimeout(() => setShareNote(''), 2000)
-    } catch {
-      // User dismissed the share sheet — nothing to do.
-    }
-  }
 
   const dirty = name.trim() !== savedName
 
@@ -107,14 +94,18 @@ export default function Profile() {
 
       <button
         type="button"
-        onClick={handleShare}
+        onClick={() => setShareOpen(true)}
         className="mt-3 w-full rounded-xl bg-surface py-3 text-base font-semibold text-content shadow-sm ring-1 ring-line transition active:scale-[0.99]"
       >
         Share summary
       </button>
-      {shareNote && (
-        <p className="mt-2 text-center text-sm text-muted">{shareNote}</p>
-      )}
+
+      <ShareSheet
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        text={summaryText}
+        subject={`${savedName || 'My'} cricket stats — ${seasonLabel}`}
+      />
 
       <div className="mt-8 mb-2">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
