@@ -12,7 +12,8 @@
     "gen:icons": "node scripts/gen-icons.mjs",
     "cap:sync": "npm run build && cap sync",
     "ios:add": "cap add ios",
-    "ios:open": "cap open ios"
+    "ios:open": "cap open ios",
+    "assets:generate": "capacitor-assets generate --ios --android --iconBackgroundColor '#0f172a' --iconBackgroundColorDark '#0f172a' --splashBackgroundColor '#020617' --splashBackgroundColorDark '#020617'"
   },
   "dependencies": {
     "@capacitor/android": "^7.6.7",
@@ -24,6 +25,7 @@
     "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^7.6.7",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",

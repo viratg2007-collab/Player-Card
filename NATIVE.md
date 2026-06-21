@@ -11,8 +11,11 @@ the production web build (`dist/`) inside a native shell.
   (pinned to **v7** — see the Node note below).
 - `capacitor.config.json` — `appId`, `appName: "Player Card"`, `webDir: "dist"`.
 - npm scripts: `cap:sync`, `ios:add`, `ios:open`.
-- Source art for native icons/splash in `assets/` (`icon.png` 1024,
-  `splash.png` / `splash-dark.png` 2732), regenerable via `npm run gen:icons`.
+- `@capacitor/assets` installed, with source art in `assets/` (`logo.png`,
+  adaptive `icon-foreground.png` / `icon-background.png`, and `splash.png` /
+  `splash-dark.png`), regenerable via `npm run gen:icons`. Turn it into the
+  native icon set + launch screen with `npm run assets:generate` (scoped to
+  iOS/Android — it does not touch the web manifest).
 - The service worker is automatically skipped inside the native shell
   (`src/main.jsx`), and routing uses `HashRouter`, which works in the webview.
 
@@ -43,8 +46,7 @@ npm run build
 npm run ios:add          # npx cap add ios  (runs pod install)
 
 # 3. generate the iOS icon set + launch screen from assets/
-npm install -D @capacitor/assets
-npx @capacitor/assets generate --ios
+npm run assets:generate     # @capacitor/assets, scoped to iOS/Android
 
 # 4. open in Xcode
 npm run ios:open
