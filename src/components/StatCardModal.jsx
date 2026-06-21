@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react'
 import { generateStatCard } from '../lib/statCard.js'
 
-// Generates the shareable stat-card image, previews it, and offers Share (as a
-// file — surfaces Instagram/Stories on mobile) and Download.
-export default function StatCardModal({ open, onClose, data, fileName = 'player-card.png' }) {
+// Generates a shareable stat-card image, previews it, and offers Share (as a
+// file — surfaces Instagram/Stories on mobile) and Download. Pass a different
+// `generator` (e.g. generateMatchCard) to change what's drawn.
+export default function StatCardModal({
+  open,
+  onClose,
+  data,
+  generator = generateStatCard,
+  fileName = 'player-card.png',
+}) {
   const [url, setUrl] = useState('')
   const [blob, setBlob] = useState(null)
   const [busy, setBusy] = useState(false)
@@ -16,7 +23,7 @@ export default function StatCardModal({ open, onClose, data, fileName = 'player-
     setUrl('')
     setBlob(null)
     setNote('')
-    generateStatCard(data).then((b) => {
+    generator(data).then((b) => {
       if (revoked || !b) return
       objectUrl = URL.createObjectURL(b)
       setBlob(b)

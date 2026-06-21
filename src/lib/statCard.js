@@ -152,6 +152,138 @@ export async function generateStatCard(data) {
   return await new Promise((resolve) => canvas.toBlob((b) => resolve(b), 'image/png'))
 }
 
+// Per-match story card: highlights a single performance (e.g. "103 vs
+// Westbrook"). Shows only the disciplines the player took part in.
+export async function generateMatchCard(d) {
+  const canvas = document.createElement('canvas')
+  canvas.width = W
+  canvas.height = H
+  const ctx = canvas.getContext('2d')
+
+  const g = ctx.createLinearGradient(0, 0, 0, H)
+  g.addColorStop(0, COL.bgTop)
+  g.addColorStop(1, COL.bgBottom)
+  ctx.fillStyle = g
+  ctx.fillRect(0, 0, W, H)
+
+  ctx.textBaseline = 'alphabetic'
+  ctx.textAlign = 'left'
+
+  const logo = await loadImage('/icon-512.png')
+  if (logo) ctx.drawImage(logo, PAD, 110, 92, 92)
+  setLetterSpacing(ctx, '6px')
+  ctx.fillStyle = COL.muted
+  ctx.font = `600 34px ${FONT}`
+  ctx.fillText('PLAYER CARD', PAD + 116, 172)
+  setLetterSpacing(ctx, '0px')
+
+  const cw = W - PAD * 2
+  ctx.fillStyle = COL.white
+  ctx.font = `800 76px ${FONT}`
+  ctx.fillText(clip(ctx, `vs ${d.opposition || 'Match'}`, cw), PAD, 322)
+  ctx.fillStyle = COL.muted
+  ctx.font = `400 38px ${FONT}`
+  ctx.fillText(clip(ctx, d.subtitle || '', cw), PAD, 378)
+
+  let y = 452
+
+  const heading = (text) => {
+    y += 22
+    setLetterSpacing(ctx, '3px')
+    ctx.fillStyle = COL.label
+    ctx.font = `600 27px ${FONT}`
+    ctx.fillText(text.toUpperCase(), PAD, y)
+    setLetterSpacing(ctx, '0px')
+    y += 28
+  }
+
+  const hero = (big, lines, h = 230) => {
+    ctx.fillStyle = COL.surface
+    roundRect(ctx, PAD, y, cw, h, 26)
+    ctx.fill()
+    ctx.textBaseline = 'middle'
+    ctx.fillStyle = COL.accent
+    ctx.font = `800 130px ${FONT}`
+    ctx.fillText(clip(ctx, big, cw * 0.5), PAD + 44, y + h / 2)
+    ctx.textAlign = 'right'
+    const lh = 56
+    let ly = y + h / 2 - ((lines.length - 1) * lh) / 2
+    for (const ln of lines) {
+      ctx.fillStyle = ln.muted ? COL.muted : COL.white
+      ctx.font = `${ln.muted ? '500' : '700'} 42px ${FONT}`
+      ctx.fillText(clip(ctx, ln.t, cw * 0.5), W - PAD - 44, ly)
+      ly += lh
+    }
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'alphabetic'
+    y += h + 24
+  }
+
+  const row = (items) => {
+    const gap = 24
+    const tw = (cw - gap * (items.length - 1)) / items.length
+    items.forEach((it, i) => {
+      const x = PAD + i * (tw + gap)
+      ctx.fillStyle = COL.surface
+      roundRect(ctx, x, y, tw, 168, 26)
+      ctx.fill()
+      ctx.fillStyle = COL.white
+      ctx.font = `800 60px ${FONT}`
+      ctx.fillText(clip(ctx, String(it.v), tw - 56), x + 30, y + 92)
+      ctx.fillStyle = COL.muted
+      ctx.font = `500 28px ${FONT}`
+      ctx.fillText(it.l, x + 30, y + 134)
+    })
+    y += 168 + 24
+  }
+
+  if (d.didBat) {
+    heading('Batting')
+    hero(d.score, [
+      { t: `${d.balls} balls`, muted: true },
+      { t: `SR ${d.sr}`, muted: false },
+      { t: d.howOut, muted: true },
+    ])
+    row([
+      { v: d.fours, l: 'Fours' },
+      { v: d.sixes, l: 'Sixes' },
+      { v: d.sr, l: 'Strike rate' },
+    ])
+  }
+
+  if (d.didBowl) {
+    heading('Bowling')
+    hero(d.figures, [
+      { t: `${d.overs} overs`, muted: true },
+      { t: `Econ ${d.economy}`, muted: false },
+    ])
+    row([
+      { v: d.overs, l: 'Overs' },
+      { v: d.maidens, l: 'Maidens' },
+      { v: d.economy, l: 'Economy' },
+    ])
+  }
+
+  if (d.fieldingTotal > 0) {
+    heading('Fielding')
+    row([
+      { v: d.catches, l: 'Catches' },
+      { v: d.runOuts, l: 'Run-outs' },
+      { v: d.stumpings, l: 'Stumpings' },
+    ])
+  }
+
+  ctx.textAlign = 'center'
+  setLetterSpacing(ctx, '2px')
+  ctx.fillStyle = COL.label
+  ctx.font = `500 30px ${FONT}`
+  ctx.fillText('TRACKED WITH PLAYER CARD', W / 2, H - 96)
+  setLetterSpacing(ctx, '0px')
+  ctx.textAlign = 'left'
+
+  return await new Promise((resolve) => canvas.toBlob((b) => resolve(b), 'image/png'))
+}
+
 function setLetterSpacing(ctx, value) {
   try {
     ctx.letterSpacing = value

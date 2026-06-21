@@ -5,7 +5,9 @@ import { dismissalLabel, EM_DASH } from '../constants.js'
 import { ballsToOvers, oversToBalls, oversToDecimal } from '../lib/overs.js'
 import { statsByFormat, battingStats } from '../lib/stats.js'
 import { matchSummary } from '../lib/matchSummary.js'
+import { generateMatchCard } from '../lib/statCard.js'
 import ShareSheet from '../components/ShareSheet.jsx'
+import StatCardModal from '../components/StatCardModal.jsx'
 
 // Read-only view of a single match, reached by tapping a match in a list.
 // Editing is one tap away via the Edit button.
@@ -17,6 +19,7 @@ export default function MatchDetail() {
   const [allMatches, setAllMatches] = useState([])
   const [playerName, setPlayerName] = useState('')
   const [shareOpen, setShareOpen] = useState(false)
+  const [imageOpen, setImageOpen] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -57,6 +60,29 @@ export default function MatchDetail() {
       : EM_DASH
   const fieldingTotal =
     (fielding.catches || 0) + (fielding.runOuts || 0) + (fielding.stumpings || 0)
+
+  // Data for the shareable per-match story card.
+  const matchCardData = {
+    opposition: match.opposition,
+    subtitle: `${formatDate(match.date)} · ${formatLabel(match)}${match.venue ? ` · ${match.venue}` : ''}`,
+    didBat: batting.didBat,
+    score: `${batting.runs}${notOut ? '*' : ''}`,
+    balls: batting.balls,
+    howOut: dismissalLabel(batting.howOut),
+    sr,
+    fours: batting.fours,
+    sixes: batting.sixes,
+    didBowl: bowling.didBowl,
+    figures: `${bowling.wickets}/${bowling.runsConceded}`,
+    overs: ballsToOvers(oversToBalls(bowling.overs)),
+    economy: econ,
+    maidens: bowling.maidens,
+    fieldingTotal,
+    catches: fielding.catches,
+    runOuts: fielding.runOuts,
+    stumpings: fielding.stumpings,
+    shareText: matchSummary(match, playerName),
+  }
 
   // How the player has done across all matches in this format (context).
   const formatRow = statsByFormat(allMatches).find((r) => r.format === match.format)
@@ -194,9 +220,16 @@ export default function MatchDetail() {
         )}
       </div>
 
+      <button
+        type="button"
+        onClick={() => setImageOpen(true)}
+        className="mt-6 block w-full rounded-xl bg-accent py-3 text-center text-base font-semibold text-white shadow-sm transition active:scale-[0.99]"
+      >
+        Share as image
+      </button>
       <Link
         to={`/match/${id}/edit`}
-        className="mt-6 block w-full rounded-xl bg-accent py-3 text-center text-base font-semibold text-white shadow-sm active:scale-[0.99]"
+        className="mt-2 block w-full rounded-xl bg-surface py-3 text-center text-base font-semibold text-content shadow-sm ring-1 ring-line transition active:scale-[0.99]"
       >
         Edit match
       </Link>
@@ -206,6 +239,13 @@ export default function MatchDetail() {
         onClose={() => setShareOpen(false)}
         text={matchSummary(match, playerName)}
         subject={`${playerName || 'My'} — vs ${match.opposition || 'match'}`}
+      />
+      <StatCardModal
+        open={imageOpen}
+        onClose={() => setImageOpen(false)}
+        data={matchCardData}
+        generator={generateMatchCard}
+        fileName={`player-card-vs-${(match.opposition || 'match').toLowerCase().replace(/\s+/g, '-')}.png`}
       />
     </div>
   )
