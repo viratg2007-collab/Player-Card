@@ -96,16 +96,28 @@ export async function deleteMatch(id) {
 export async function getProfile() {
   const db = await getDB()
   const profile = await db.get(PROFILE, 'me')
-  return { id: 'me', name: '', currentSeason: '', ...profile }
+  return {
+    id: 'me',
+    name: '',
+    currentSeason: '',
+    battingStyle: '',
+    bowlingArm: '',
+    bowlerType: '',
+    ...profile,
+  }
 }
 
 export async function saveProfile(profile) {
   const db = await getDB()
-  const existing = await db.get(PROFILE, 'me')
+  const existing = (await db.get(PROFILE, 'me')) || {}
+  const pick = (key) => (profile[key] ?? existing[key] ?? '')
   const record = {
     id: 'me',
-    name: (profile.name ?? existing?.name ?? '').trim(),
-    currentSeason: (profile.currentSeason ?? existing?.currentSeason ?? '').trim(),
+    name: pick('name').trim(),
+    currentSeason: pick('currentSeason').trim(),
+    battingStyle: pick('battingStyle'),
+    bowlingArm: pick('bowlingArm'),
+    bowlerType: pick('bowlerType'),
   }
   await db.put(PROFILE, record)
   return record

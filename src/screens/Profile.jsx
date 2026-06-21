@@ -9,34 +9,58 @@ import DataTools from '../components/DataTools.jsx'
 import ThemeToggle from '../components/ThemeToggle.jsx'
 import ShareSheet from '../components/ShareSheet.jsx'
 import StatCardModal from '../components/StatCardModal.jsx'
-import { TextField } from '../components/form/Field.jsx'
+import { TextField, SelectField } from '../components/form/Field.jsx'
+import { BATTING_STYLES, BOWLING_ARMS, BOWLER_TYPES, playerStyleLine } from '../constants.js'
+
+const SELECT = (list, placeholder) => [{ value: '', label: placeholder }, ...list]
 
 export default function Profile() {
   const { allMatches, matches, seasons, season, chooseSeason } = useSeasonMatches()
-  const [name, setName] = useState('')
-  const [savedName, setSavedName] = useState('')
+  const emptyForm = { name: '', battingStyle: '', bowlingArm: '', bowlerType: '' }
+  const [form, setForm] = useState(emptyForm)
+  const [saved, setSaved] = useState(emptyForm)
   const [currentSeason, setCurrentSeason] = useState('')
   const [shareOpen, setShareOpen] = useState(false)
   const [imageOpen, setImageOpen] = useState(false)
 
   useEffect(() => {
     getProfile().then((p) => {
-      setName(p.name)
-      setSavedName(p.name)
+      const f = {
+        name: p.name,
+        battingStyle: p.battingStyle,
+        bowlingArm: p.bowlingArm,
+        bowlerType: p.bowlerType,
+      }
+      setForm(f)
+      setSaved(f)
       setCurrentSeason(p.currentSeason)
     })
   }, [])
 
+  const setField = (key, value) => setForm((f) => ({ ...f, [key]: value }))
+
   async function handleSave() {
-    const saved = await saveProfile({ name })
-    setSavedName(saved.name)
+    const rec = await saveProfile(form)
+    setSaved({
+      name: rec.name,
+      battingStyle: rec.battingStyle,
+      bowlingArm: rec.bowlingArm,
+      bowlerType: rec.bowlerType,
+    })
   }
 
   const s = seasonSummary(matches)
   const seasonLabel = season || 'All seasons'
-  const summaryText = buildSummary(savedName, seasonLabel, s)
+  const styleLine = playerStyleLine(saved)
+  const summaryText = buildSummary(saved.name, seasonLabel, s, styleLine)
+  const savedName = saved.name
 
-  const dirty = name.trim() !== savedName
+  const bowls = form.bowlingArm && form.bowlingArm !== 'none'
+  const dirty =
+    form.name.trim() !== saved.name ||
+    form.battingStyle !== saved.battingStyle ||
+    form.bowlingArm !== saved.bowlingArm ||
+    form.bowlerType !== saved.bowlerType
 
   return (
     <div>
@@ -47,17 +71,39 @@ export default function Profile() {
       <section className="space-y-3 rounded-2xl bg-surface p-4 shadow-sm ring-1 ring-line/60">
         <TextField
           label="Player name"
-          value={name}
-          onChange={setName}
+          value={form.name}
+          onChange={(v) => setField('name', v)}
           placeholder="Your name"
         />
+        <SelectField
+          label="Batting"
+          value={form.battingStyle}
+          onChange={(v) => setField('battingStyle', v)}
+          options={SELECT(BATTING_STYLES, 'Select…')}
+        />
+        <div className="grid grid-cols-2 gap-3">
+          <SelectField
+            label="Bowling arm"
+            value={form.bowlingArm}
+            onChange={(v) => setField('bowlingArm', v)}
+            options={SELECT(BOWLING_ARMS, 'Select…')}
+          />
+          {bowls && (
+            <SelectField
+              label="Bowler type"
+              value={form.bowlerType}
+              onChange={(v) => setField('bowlerType', v)}
+              options={SELECT(BOWLER_TYPES, 'Select…')}
+            />
+          )}
+        </div>
         <button
           type="button"
           onClick={handleSave}
           disabled={!dirty}
           className="w-full rounded-xl bg-accent py-2.5 text-sm font-semibold text-white shadow-sm transition active:scale-[0.99] disabled:opacity-40"
         >
-          Save name
+          Save profile
         </button>
       </section>
 
@@ -83,6 +129,7 @@ export default function Profile() {
         <p className="mt-0.5 text-lg font-bold">
           {savedName || 'Your name'}
         </p>
+        {styleLine && <p className="mt-0.5 text-xs text-slate-300">{styleLine}</p>}
 
         <div className="mt-4 grid grid-cols-3 gap-y-4 text-center">
           <Stat value={s.matchesPlayed} label="Matches" />
@@ -120,7 +167,7 @@ export default function Profile() {
       <StatCardModal
         open={imageOpen}
         onClose={() => setImageOpen(false)}
-        data={buildStatCardData(savedName, seasonLabel, s, summaryText)}
+        data={buildStatCardData(savedName, seasonLabel, s, summaryText, styleLine)}
         fileName="player-card.png"
       />
 
@@ -154,10 +201,11 @@ function Stat({ value, label }) {
   )
 }
 
-function buildStatCardData(name, seasonLabel, s, shareText) {
+function buildStatCardData(name, seasonLabel, s, shareText, styleLine) {
   return {
     name: name || 'Cricketer',
     seasonLabel,
+    styleLine,
     shareText,
     matches: s.matchesPlayed,
     runs: s.batting.totalRuns,
@@ -177,10 +225,11 @@ function buildStatCardData(name, seasonLabel, s, shareText) {
   }
 }
 
-function buildSummary(name, seasonLabel, s) {
+function buildSummary(name, seasonLabel, s, styleLine) {
   const who = name || 'My'
   const lines = [
     `${who} — ${seasonLabel}`,
+    ...(styleLine ? [styleLine] : []),
     `${s.matchesPlayed} matches`,
     `Batting: ${s.batting.totalRuns} runs @ ${s.batting.average} (SR ${s.batting.strikeRate}), HS ${s.batting.highest}`,
     `Bowling: ${s.bowling.wickets} wkts @ ${s.bowling.average} (econ ${s.bowling.economy}), best ${s.bowling.best}`,

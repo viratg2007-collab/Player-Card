@@ -76,7 +76,12 @@ export async function generateStatCard(data) {
   ctx.fillText(data.seasonLabel || '', PAD, 380)
 
   const cw = W - PAD * 2
-  let y = 440
+  if (data.styleLine) {
+    ctx.fillStyle = COL.label
+    ctx.font = `500 32px ${FONT}`
+    ctx.fillText(clip(ctx, data.styleLine, cw), PAD, 426)
+  }
+  let y = data.styleLine ? 480 : 440
 
   const tile = (x, w, value, label, accent) => {
     ctx.fillStyle = COL.surface
