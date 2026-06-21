@@ -1,8 +1,10 @@
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSeasonMatches } from '../hooks/useSeasonMatches.js'
 import { seasonSummary } from '../lib/stats.js'
 import { loadSampleData } from '../db/seed.js'
 import SeasonSelect from '../components/SeasonSelect.jsx'
+import FilterPills from '../components/FilterPills.jsx'
 import StatCard from '../components/StatCard.jsx'
 import RunsTrend from '../components/RunsTrend.jsx'
 import FormatBreakdown from '../components/FormatBreakdown.jsx'
@@ -12,6 +14,19 @@ import EmptyState from '../components/EmptyState.jsx'
 
 export default function Dashboard() {
   const { loading, matches, seasons, season, chooseSeason } = useSeasonMatches()
+  const [format, setFormat] = useState('')
+
+  // Formats present in the current season, most-played first.
+  const formats = useMemo(() => {
+    const counts = new Map()
+    for (const m of matches) counts.set(m.format, (counts.get(m.format) || 0) + 1)
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([f]) => f)
+  }, [matches])
+
+  // Drop the format filter if it's no longer available (e.g. season changed).
+  useEffect(() => {
+    if (format && !formats.includes(format)) setFormat('')
+  }, [formats, format])
 
   if (loading) return <Loading />
 
@@ -32,8 +47,9 @@ export default function Dashboard() {
     )
   }
 
-  const s = seasonSummary(matches)
-  const recent = matches.slice(0, 4)
+  const filtered = format ? matches.filter((m) => m.format === format) : matches
+  const s = seasonSummary(filtered)
+  const recent = filtered.slice(0, 4)
   const seasonLabel = season || 'All seasons'
 
   return (
@@ -53,9 +69,10 @@ export default function Dashboard() {
       </header>
 
       <SeasonSelect seasons={seasons} value={season} onChange={chooseSeason} />
+      <FilterPills options={formats} value={format} onChange={setFormat} allLabel="All formats" />
 
       <div className="space-y-3">
-        <Highlights matches={matches} />
+        <Highlights matches={filtered} />
 
         <StatCard
           title="Batting"
@@ -70,7 +87,7 @@ export default function Dashboard() {
           ]}
         />
 
-        <RunsTrend matches={matches} />
+        <RunsTrend matches={filtered} />
 
         <StatCard
           title="Bowling"
@@ -93,7 +110,7 @@ export default function Dashboard() {
           ]}
         />
 
-        <FormatBreakdown matches={matches} />
+        <FormatBreakdown matches={filtered} />
       </div>
 
       <section className="mt-6">

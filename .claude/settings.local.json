@@ -30,7 +30,10 @@
       "Bash(git commit -q -m 'Add share innings, swipe-to-delete, and per-format context card *)",
       "Bash(git commit -q -m 'Add season management, personal bests, and CSV export/import *)",
       "Bash(xargs -0 sed -i '' -e s/bg-white/bg-surface/g -e s/text-ink/text-content/g -e s/ring-slate-200/ring-line/g -e s/border-slate-200/border-line/g -e s/border-slate-100/border-line/g -e s/divide-slate-100/divide-line/g -e s/text-slate-400/text-muted/g -e s/text-slate-500/text-muted/g -e s/text-slate-600/text-muted/g -e s/bg-slate-100/bg-surface2/g -e s/bg-slate-200/bg-surface2/g)",
-      "Bash(git commit -q -m 'Add season comparison, dark mode, and PWA support *)"
+      "Bash(git commit -q -m 'Add season comparison, dark mode, and PWA support *)",
+      "Bash(node scripts/gen-icons.mjs)",
+      "Bash(curl -s -o /dev/null -w \"icon-192 %{http_code}\\\\n\" http://localhost:5173/icon-192.png)",
+      "Bash(git commit -q -m 'Add PNG app icons, innings-vs-average, and dashboard format filter *)"
     ]
   }
 }

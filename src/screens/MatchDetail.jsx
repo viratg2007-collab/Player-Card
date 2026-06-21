@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getMatch, getAllMatches, getProfile } from '../db/matches.js'
 import { dismissalLabel, EM_DASH } from '../constants.js'
 import { ballsToOvers, oversToBalls, oversToDecimal } from '../lib/overs.js'
-import { statsByFormat } from '../lib/stats.js'
+import { statsByFormat, battingStats } from '../lib/stats.js'
 import { matchSummary } from '../lib/matchSummary.js'
 
 // Read-only view of a single match, reached by tapping a match in a list.
@@ -77,6 +77,13 @@ export default function MatchDetail() {
   const formatRow = statsByFormat(allMatches).find((r) => r.format === match.format)
   const showContext = formatRow && formatRow.matches >= 2
 
+  // This knock compared to the player's batting average in this format.
+  const formatBat = battingStats(allMatches.filter((m) => m.format === match.format))
+  const fmtAvg = Number(formatBat.average)
+  const showBatCompare =
+    batting.didBat && formatBat.inningsCount >= 2 && !Number.isNaN(fmtAvg)
+  const battingDiff = Math.round((batting.runs - fmtAvg) * 10) / 10
+
   return (
     <div>
       <header className="mb-4 flex items-center justify-between">
@@ -132,6 +139,26 @@ export default function MatchDetail() {
             />
           ) : (
             <Muted>Did not bat</Muted>
+          )}
+          {showBatCompare && (
+            <p className="mt-3 border-t border-line pt-3 text-xs text-muted">
+              {battingDiff === 0 ? (
+                <>Right on your {match.format} average of {fmtAvg}.</>
+              ) : (
+                <>
+                  <span
+                    className={
+                      'font-semibold ' +
+                      (battingDiff > 0 ? 'text-accent' : 'text-content')
+                    }
+                  >
+                    {battingDiff > 0 ? '+' : ''}
+                    {battingDiff}
+                  </span>{' '}
+                  {battingDiff > 0 ? 'above' : 'below'} your {match.format} average of {fmtAvg}.
+                </>
+              )}
+            </p>
           )}
         </DetailCard>
 

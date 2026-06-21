@@ -194,8 +194,11 @@ offline-capable (cache-first shell, navigation fallback to `index.html`). The
 service worker is registered only in production builds (`import.meta.env.PROD`)
 so dev isn't affected — test it via `npm run build && npm run preview`. Bump the
 `CACHE` constant in `sw.js` when shipping changes that must invalidate the
-offline cache. Icons are currently SVG; PNG icons (192/512) are a future nicety
-for the widest install support.
+offline cache. PNG icons (192/512 + maskable + apple-touch) are generated from
+the SVG marks by `npm run gen:icons` (`scripts/gen-icons.mjs`, uses `sharp`) —
+re-run it if the logo changes. iOS launch/splash images (the per-device
+`apple-touch-startup-image` matrix) are a future nicety; Android derives its
+splash from the manifest name + `background_color` + icon automatically.
 
 ## Conventions
 
