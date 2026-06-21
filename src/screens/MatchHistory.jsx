@@ -1,13 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSeasonMatches } from '../hooks/useSeasonMatches.js'
+import { deleteMatch } from '../db/matches.js'
 import SeasonSelect from '../components/SeasonSelect.jsx'
 import FilterPills from '../components/FilterPills.jsx'
-import MatchListItem from '../components/MatchListItem.jsx'
+import SwipeableMatchRow from '../components/SwipeableMatchRow.jsx'
 import EmptyState from '../components/EmptyState.jsx'
 
 export default function MatchHistory() {
-  const { loading, matches, seasons, season, chooseSeason } = useSeasonMatches()
+  const { loading, matches, seasons, season, chooseSeason, reload } = useSeasonMatches()
   const [format, setFormat] = useState('')
+
+  async function handleDelete(matchId) {
+    await deleteMatch(matchId)
+    await reload()
+  }
 
   // Formats present in the current season, most-played first.
   const formats = useMemo(() => {
@@ -53,11 +59,16 @@ export default function MatchHistory() {
           No matches to show.
         </p>
       ) : (
-        <div className="space-y-2">
-          {visible.map((m) => (
-            <MatchListItem key={m.id} match={m} />
-          ))}
-        </div>
+        <>
+          <div className="space-y-2">
+            {visible.map((m) => (
+              <SwipeableMatchRow key={m.id} match={m} onDelete={handleDelete} />
+            ))}
+          </div>
+          <p className="mt-3 text-center text-xs text-slate-400">
+            Swipe a match left to delete
+          </p>
+        </>
       )}
     </div>
   )

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { getMatch } from '../db/matches.js'
+import { getMatch, getAllMatches, getProfile } from '../db/matches.js'
 import { dismissalLabel, EM_DASH } from '../constants.js'
 import { ballsToOvers, oversToBalls, oversToDecimal } from '../lib/overs.js'
+import { statsByFormat } from '../lib/stats.js'
+import { matchSummary } from '../lib/matchSummary.js'
 
 // Read-only view of a single match, reached by tapping a match in a list.
 // Editing is one tap away via the Edit button.
@@ -11,6 +13,9 @@ export default function MatchDetail() {
   const navigate = useNavigate()
   const [match, setMatch] = useState(null)
   const [missing, setMissing] = useState(false)
+  const [allMatches, setAllMatches] = useState([])
+  const [playerName, setPlayerName] = useState('')
+  const [shareNote, setShareNote] = useState('')
 
   useEffect(() => {
     let active = true
@@ -19,10 +24,28 @@ export default function MatchDetail() {
       if (m) setMatch(m)
       else setMissing(true)
     })
+    getAllMatches().then((all) => active && setAllMatches(all))
+    getProfile().then((p) => active && setPlayerName(p.name))
     return () => {
       active = false
     }
   }, [id])
+
+  async function handleShare() {
+    if (!match) return
+    const text = matchSummary(match, playerName)
+    try {
+      if (navigator.share) {
+        await navigator.share({ text })
+        return
+      }
+      await navigator.clipboard.writeText(text)
+      setShareNote('Copied to clipboard')
+      setTimeout(() => setShareNote(''), 2000)
+    } catch {
+      // Share sheet dismissed — nothing to do.
+    }
+  }
 
   if (missing) {
     return (
@@ -50,9 +73,13 @@ export default function MatchDetail() {
   const fieldingTotal =
     (fielding.catches || 0) + (fielding.runOuts || 0) + (fielding.stumpings || 0)
 
+  // How the player has done across all matches in this format (context).
+  const formatRow = statsByFormat(allMatches).find((r) => r.format === match.format)
+  const showContext = formatRow && formatRow.matches >= 2
+
   return (
     <div>
-      <header className="mb-4 flex items-start justify-between">
+      <header className="mb-4 flex items-center justify-between">
         <button
           type="button"
           onClick={() => navigate(-1)}
@@ -60,12 +87,21 @@ export default function MatchDetail() {
         >
           ‹ Back
         </button>
-        <Link
-          to={`/match/${id}/edit`}
-          className="text-sm font-semibold text-accent"
-        >
-          Edit
-        </Link>
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={handleShare}
+            className="text-sm font-semibold text-slate-500"
+          >
+            Share
+          </button>
+          <Link
+            to={`/match/${id}/edit`}
+            className="text-sm font-semibold text-accent"
+          >
+            Edit
+          </Link>
+        </div>
       </header>
 
       <div className="mb-5">
@@ -129,7 +165,26 @@ export default function MatchDetail() {
             <Muted>No fielding dismissals</Muted>
           )}
         </DetailCard>
+
+        {/* Per-format context — how this match sits within the player's record */}
+        {showContext && (
+          <DetailCard title={`Your ${match.format} record`}>
+            <Rows
+              rows={[
+                ['Matches', formatRow.matches],
+                ['Runs', formatRow.runs],
+                ['Batting avg', formatRow.battingAverage],
+                ['Wickets', formatRow.wickets],
+                ['Bowling avg', formatRow.bowlingAverage],
+              ]}
+            />
+          </DetailCard>
+        )}
       </div>
+
+      {shareNote && (
+        <p className="mt-4 text-center text-sm text-slate-500">{shareNote}</p>
+      )}
 
       <Link
         to={`/match/${id}/edit`}
