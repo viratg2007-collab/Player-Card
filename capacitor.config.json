@@ -1,0 +1,9 @@
+{
+  "appId": "com.playercard.app",
+  "appName": "Player Card",
+  "webDir": "dist",
+  "ios": {
+    "contentInset": "always"
+  },
+  "backgroundColor": "#020617"
+}

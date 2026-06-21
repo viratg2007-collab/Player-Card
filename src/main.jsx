@@ -8,8 +8,11 @@ import App from './App.jsx'
 // Apply the saved theme before first paint to avoid a flash.
 initTheme()
 
-// Register the offline service worker in production builds.
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
+// Register the offline service worker in production web builds only. Inside the
+// native Capacitor shell the assets are bundled, so the SW is skipped to avoid
+// caching conflicts on app updates.
+const isNative = !!window.Capacitor?.isNativePlatform?.()
+if ('serviceWorker' in navigator && import.meta.env.PROD && !isNative) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(() => {})
   })

@@ -4,3 +4,18 @@ dist-ssr
 *.local
 .DS_Store
 .vite
+
+# Capacitor native build artifacts (the ios/ and android/ projects ARE committed;
+# only their generated build output and dependencies are ignored)
+/ios/App/Pods
+/ios/App/Podfile.lock
+/ios/App/output
+/ios/App/build
+/ios/DerivedData
+/ios/capacitor-cordova-ios-plugins
+/android/.gradle
+/android/build
+/android/app/build
+/android/captures
+/android/local.properties
+*.xcuserstate

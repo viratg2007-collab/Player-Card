@@ -6,7 +6,8 @@ a club admin — no accounts, no backend. Everything runs client-side and persis
 in your browser.
 
 > v1 is a web app. The plan: ship it, gain traction, then build a native App
-> Store app. See [`CLAUDE.md`](./CLAUDE.md) for the full data model and roadmap.
+> Store app. See [`CLAUDE.md`](./CLAUDE.md) for the full data model and roadmap,
+> and [`NATIVE.md`](./NATIVE.md) for the Capacitor iOS build/submit runbook.
 
 ## Features
 

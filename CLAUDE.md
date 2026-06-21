@@ -170,6 +170,12 @@ decisions friendly to that future:
   future native web-view shell) without server route config.
 - No web-only/server dependencies that would block a native wrapper.
 
+The native path is now scaffolded with **Capacitor** (wraps `dist/` in an iOS/
+Android shell). See **`NATIVE.md`** for the build/submit runbook. Capacitor is
+pinned to **v7** because the dev Node is 20 (v8 needs Node ≥22). The service
+worker is skipped inside the native shell and `HashRouter` works in the webview.
+The `ios/` project is generated on a Mac with CocoaPods (not committed yet).
+
 ## Theming (light / dark)
 
 Colors are split into two groups in `tailwind.config.js`:
